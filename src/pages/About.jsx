@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Section from '../components/ui/Section';
 import Card from '../components/ui/Card';
 import { Target, Lightbulb } from 'lucide-react';
+import founderImage from '../assets/founder.png';
 
 const About = () => {
     return (
@@ -23,6 +24,23 @@ const About = () => {
             </div>
 
             <Section>
+                {/* Founder Image */}
+                <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
+                    <div style={{
+                        maxWidth: '800px',
+                        margin: '0 auto',
+                        borderRadius: '1rem',
+                        overflow: 'hidden',
+                        boxShadow: '0 20px 40px -10px rgba(0,0,0,0.2)'
+                    }}>
+                        <img
+                            src={founderImage}
+                            alt="Bongz Donda - Founder of Dondastech"
+                            style={{ width: '100%', display: 'block' }}
+                        />
+                    </div>
+                </div>
+
                 <div className="grid-2" style={{ alignItems: 'start' }}>
                     <div>
                         <h2>Our Journey</h2>
