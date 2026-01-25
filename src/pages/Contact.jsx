@@ -29,7 +29,7 @@ const Contact = () => {
         <>
             <Helmet>
                 <title>Contact Us | Dondastech</title>
-                <meta name="description" content="Contact Dondastech for your ICT system solutions. Email: info@dondastech.co.za, WhatsApp: 078 218 9537." />
+                <meta name="description" content="Contact Dondastech for your ICT system solutions. Email: info@dondastech.co.za, WhatsApp: 078 944 9821." />
             </Helmet>
 
             <div style={{ paddingTop: '8rem', paddingBottom: '4rem', background: 'linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg))', textAlign: 'center' }}>
@@ -43,11 +43,16 @@ const Contact = () => {
 
             <Section>
                 <div className="grid-2" style={{ alignItems: 'start' }}>
-                    {/* Contact Info */}
+                    {/* Contact Info *//*DondaDondas Tech is a fresh entrant in the ICT landscape, backed by deep industry expertise from our founder.
+With a strong foundation in technology, we've hit the ground running tackling diverse projects, honing our skills and forging meaningful partnerships right from the start.
+Our Core Focus: We assist small companies with system solutions. That is what we do best. We understand that small businesses need scalable, efficient and affordable technology to grow and we provide exactly that.
+Guided by our core values Innovate, Create, Accelerate, we transform ideas into reality. From simple digital platforms to complex automation systems, our seasoned approach delivers professional results that empower our clients to lead in their fields.
+ */}
                     <div>
                         <h2>Get in Touch</h2>
                         <p className="text-muted" style={{ marginBottom: '2rem' }}>
                             We are ready to assist you with scalable system solutions for your business. Reach out via email, phone, or WhatsApp.
+
                         </p>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -67,7 +72,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <p className="text-muted" style={{ fontSize: '0.85rem' }}>WhatsApp / Call</p>
-                                    <a href="https://wa.me/27782189537" style={{ fontWeight: 600, fontSize: '1.1rem' }}>078 218 9537</a>
+                                    <a href="https://wa.me/27789449821" style={{ fontWeight: 600, fontSize: '1.1rem' }}>078 944 9821</a>
                                 </div>
                             </Card>
 
@@ -77,7 +82,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <p className="text-muted" style={{ fontSize: '0.85rem' }}>Location</p>
-                                    <p style={{ fontWeight: 600, fontSize: '1.1rem' }}>South Africa (Gauteng, KwaZulu-Natal, Free State)</p>
+                                    <p style={{ fontWeight: 600, fontSize: '1.1rem' }}>South Africa (Gauteng, Mpumalanga, KwaZulu-Natal, Free State)</p>
                                 </div>
                             </Card>
                         </div>
@@ -98,11 +103,7 @@ const Contact = () => {
                                         value={formState.name}
                                         onChange={handleChange}
                                         className="form-input"
-                                        placeholder="Bongz DondaDondas Tech is a fresh entrant in the ICT landscape, backed by deep industry expertise from our founder.
-With a strong foundation in technology, we've hit the ground running tackling diverse projects, honing our skills, and forging meaningful partnerships right from the start.
-Our Core Focus: We assist small companies with system solutions. That is what we do best. We understand that small businesses need scalable, efficient, and affordable technology to grow and we provide exactly that.
-Guided by our core values Innovate, Create, Accelerate, we transform ideas into reality. From simple digital platforms to complex automation systems, our seasoned approach delivers professional results that empower our clients to lead in their fields.
-"
+                                        placeholder="Bon Spho Donda"
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginBottom: 0 }}>

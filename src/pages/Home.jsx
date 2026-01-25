@@ -11,7 +11,7 @@ const Home = () => {
     <>
       <Helmet>
         <title>Dondastech | ICT Solutions & System Development</title>
-        <meta name="description" content="Dondastech provides professional ICT solutions, system development, and digital platforms. We specialize in assisting small companies with scalable system solutions." />
+        <meta name="description" content="Dondastech provides professional ICT solutions, system development and digital platforms. We specialize in assisting small companies with scalable system solutions." />
       </Helmet>
 
       {/* Hero Section */}
@@ -38,7 +38,7 @@ const Home = () => {
             Scalable System Solutions <br /> for Growing Businesses
           </h1>
           <p className="text-muted" style={{ fontSize: '1.25rem', maxWidth: '800px', margin: '0 auto 2.5rem' }}>
-            We specialize in assisting small companies with custom system solutions, digital platforms, and ICT strategies designed for growth and efficiency.
+            We specialize in assisting small companies with custom system solutions, digital platforms and ICT strategies designed for growth and efficiency.
           </p>
           <div className="flex justify-center gap-2">
             <Link to="/contact">
@@ -107,7 +107,7 @@ const Home = () => {
               {[
                 "Proven track record with small businesses",
                 "Scalable solutions aimed at future growth",
-                "Clean, modern, and professional designs",
+                "Clean, modern and professional designs",
                 "Ongoing technical support and innovation"
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-2">

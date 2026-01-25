@@ -4,6 +4,10 @@ import Section from '../components/ui/Section';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 
+import inventoryImg from '../assets/inventory-system.png';
+import portalImg from '../assets/client-portal.png';
+import trackerImg from '../assets/fleet-tracker.png';
+
 const Projects = () => {
     const projects = [
         {
@@ -11,21 +15,21 @@ const Projects = () => {
             category: "System Development",
             description: "A custom inventory management solution built for a local retail chain to automate stock tracking and reordering.",
             tags: ["React", "Node.js", "PostgreSQL"],
-            image: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)"
+            image: inventoryImg
         },
         {
             title: "Corporate Client Portal",
             category: "Digital Platform",
-            description: "A secure client portal allowing real-time document sharing, project status tracking, and communication.",
+            description: "A secure client portal allowing real-time document sharing, project status tracking and communication.",
             tags: ["Vue.js", "Firebase", "Vanilla CSS"],
-            image: "linear-gradient(135deg, #334155 0%, #1e293b 100%)"
+            image: portalImg
         },
         {
             title: "Logistics Fleet Tracker",
             category: "Automation",
             description: "An automated tracking system for a logistics company, integrating GPS data with a central dashboard.",
             tags: ["React Native", "Google Maps API", "Express"],
-            image: "linear-gradient(135deg, #475569 0%, #334155 100%)"
+            image: trackerImg
         }
     ];
 
@@ -53,7 +57,9 @@ const Projects = () => {
                                 style={{
                                     height: '200px',
                                     width: '100%',
-                                    background: project.image,
+                                    backgroundImage: `url(${project.image})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',

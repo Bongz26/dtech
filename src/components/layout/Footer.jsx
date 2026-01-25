@@ -9,7 +9,7 @@ const Footer = () => {
                     <div className="col-span-1 md:col-span-2">
                         <h3 className="text-2xl font-bold mb-4">Dondastech</h3>
                         <p className="text-muted mb-6">
-                            Your reliable technology partner. We assist companies with scalable system solutions, digital platforms, and ICT innovation.
+                            Your reliable technology partner. We assist companies with scalable system solutions, digital platforms and ICT innovation.
                         </p>
                         <div className="flex gap-2">
                             <a href="#" className="text-muted hover:text-primary"><Linkedin size={20} /></a>
@@ -37,11 +37,11 @@ const Footer = () => {
                             </li>
                             <li className="flex items-center gap-2 text-muted">
                                 <Phone className="text-primary" size={18} />
-                                <span>078 218 9537</span>
+                                <span>078 944 9821</span>
                             </li>
                             <li className="flex items-center gap-2 text-muted">
                                 <MapPin className="text-primary" size={18} />
-                                <span>South Africa (Gauteng, KwaZulu-Natal, Free State)</span>
+                                <span>South Africa (Gauteng, Mpumalanga, KwaZulu-Natal, Free State)</span>
                             </li>
                         </ul>
                     </div>

@@ -21,7 +21,7 @@ const Services = () => {
         {
             icon: <Database size={32} style={{ color: '#4ade80' }} />,
             title: "Database Design & Management",
-            description: "Secure and scalable database architectures to ensure your business data is organized, accessible, and protected."
+            description: "Secure and scalable database architectures to ensure your business data is organized, accessible and protected."
         },
         {
             icon: <Settings size={32} style={{ color: '#fb923c' }} />,
@@ -31,7 +31,7 @@ const Services = () => {
         {
             icon: <Shield size={32} style={{ color: '#f87171' }} />,
             title: "Technical Support & Maintenance",
-            description: "Ongoing support to ensure your systems remain up-to-date, secure, and functioning optimally."
+            description: "Ongoing support to ensure your systems remain up-to-date, secure and functioning optimally."
         },
         {
             icon: <BarChart size={32} style={{ color: '#2dd4bf' }} />,
@@ -44,7 +44,7 @@ const Services = () => {
         <>
             <Helmet>
                 <title>Services | Dondastech</title>
-                <meta name="description" content="Explore our ICT services: System Development, Digital Platforms, Automation, and Technical Support." />
+                <meta name="description" content="Explore our ICT services: System Development, Digital Platforms, Automation and Technical Support." />
             </Helmet>
 
             <div style={{ paddingTop: '8rem', paddingBottom: '4rem', background: 'linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg))', textAlign: 'center' }}>
@@ -72,7 +72,7 @@ const Services = () => {
                 <div className="container text-center">
                     <h2>Need a Custom Solution?</h2>
                     <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
-                        Every business is unique. Contact us to discuss your specific requirements, and we'll design a solution just for you.
+                        Every business is unique. Contact us to discuss your specific requirements and we'll design a solution just for you.
                     </p>
                     <Link to="/contact">
                         <Button variant="primary">Let's Talk</Button>

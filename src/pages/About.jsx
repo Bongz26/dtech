@@ -10,7 +10,7 @@ const About = () => {
         <>
             <Helmet>
                 <title>About Us | Dondastech</title>
-                <meta name="description" content="Learn about Dondastech, our journey in the ICT sector, and our mission to assist small companies with system solutions." />
+                <meta name="description" content="Learn about Dondastech, our journey in the ICT sector and our mission to assist small companies with system solutions." />
             </Helmet>
 
             {/* Hero */}
@@ -49,10 +49,10 @@ const About = () => {
                                 Dondas Tech is a fresh entrant in the ICT landscape, backed by deep industry expertise from our founder.
                             </p>
                             <p>
-                                With a strong foundation in technology, we've hit the ground running tackling diverse projects, honing our skills, and forging meaningful partnerships right from the start.
+                                With a strong foundation in technology, we've hit the ground running tackling diverse projects, honing our skills and forging meaningful partnerships right from the start.
                             </p>
                             <p>
-                                <strong>Our Core Focus:</strong> We assist small companies with system solutions. That is what we do best. We understand that small businesses need scalable, efficient, and affordable technology to grow and we provide exactly that.
+                                <strong>Our Core Focus:</strong> We assist small companies with system solutions. That is what we do best. We understand that small businesses need scalable, efficient and affordable technology to grow and we provide exactly that.
                             </p>
                             <p>
                                 Guided by our core values <strong>Innovate, Create, Accelerate</strong>, we transform ideas into reality. From simple digital platforms to complex automation systems, our seasoned approach delivers professional results that empower our clients to lead in their fields.
