@@ -183,39 +183,38 @@ const About = () => {
                     </div>
 
                     {/* RIGHT COLUMN: Founder Image & Bio */}
-                    <div style={{ flex: '0.8', position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                    <div style={{ flex: '0.8', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         
                         {/* Background Glow Effect */}
                         <div style={{ 
                             position: 'absolute', 
                             top: '10%', right: '0', 
                             width: '300px', height: '300px', 
-                            background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(3,7,18,0) 70%)',
+                            background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(3,7,18,0) 70%)',
                             filter: 'blur(40px)',
                             zIndex: 0
                         }}></div>
 
                         <img 
                             src={founderImageDark} 
-                            alt="Bongani Dondashe" 
+                            alt="Bongani Dondas" 
                             style={{ 
                                 width: '100%', 
-                                maxWidth: '500px', 
+                                maxWidth: '600px', 
                                 borderRadius: '24px', 
-                                objectFit: 'cover',
+                                objectFit: 'contain',
                                 zIndex: 1,
-                                border: '1px solid rgba(255,255,255,0.05)',
-                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
                             }} 
                         />
 
                         {/* Overlapping Bio Card */}
                         <div className="glass-panel-bio bio-card" style={{
-                            position: 'absolute',
-                            bottom: '20px',
-                            left: '-40px',
-                            width: 'calc(100% + 40px)',
-                            zIndex: 2
+                            position: 'relative',
+                            marginTop: '-60px',
+                            width: '90%',
+                            alignSelf: 'flex-end',
+                            zIndex: 2,
+                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
                         }}>
                             <h2 style={{ margin: '0 0 4px 0', fontSize: '1.75rem', fontWeight: 'bold' }}>Bongani Dondas</h2>
                             <div style={{ color: '#60a5fa', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
