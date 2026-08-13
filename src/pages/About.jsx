@@ -24,20 +24,109 @@ const About = () => {
             </div>
 
             <Section>
-                {/* Founder Image */}
-                <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
+                {/* Founder Image with Floating Widgets */}
+                <div style={{ marginBottom: '4rem', display: 'flex', justifyContent: 'center' }}>
                     <div style={{
-                        maxWidth: '800px',
-                        margin: '0 auto',
+                        position: 'relative',
+                        maxWidth: '900px',
+                        width: '100%',
                         borderRadius: '1rem',
-                        overflow: 'hidden',
-                        boxShadow: '0 20px 40px -10px rgba(0,0,0,0.2)'
+                        boxShadow: '0 20px 40px -10px rgba(0,0,0,0.2)',
                     }}>
                         <img
                             src={founderImage}
                             alt="Bongz Donda - Founder of Dondastech"
-                            style={{ width: '100%', display: 'block' }}
+                            style={{ width: '100%', display: 'block', borderRadius: '1rem', objectFit: 'cover' }}
                         />
+                        
+                        {/* CSS for glassmorphism */}
+                        <style>{`
+                            .glass-card {
+                                background: rgba(17, 24, 39, 0.7);
+                                backdrop-filter: blur(12px);
+                                -webkit-backdrop-filter: blur(12px);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+                                border-radius: 12px;
+                                padding: 1.5rem;
+                                color: #ffffff;
+                                z-index: 10;
+                            }
+                            @media (max-width: 768px) {
+                                .floating-widget {
+                                    position: relative !important;
+                                    top: auto !important;
+                                    left: auto !important;
+                                    right: auto !important;
+                                    bottom: auto !important;
+                                    transform: none !important;
+                                    margin: 1rem auto;
+                                    width: calc(100% - 2rem) !important;
+                                }
+                            }
+                        `}</style>
+
+                        {/* Widget 1: Core Values */}
+                        <div className="glass-card floating-widget" style={{
+                            position: 'absolute',
+                            top: '10%',
+                            left: '-5%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '1rem 1.5rem'
+                        }}>
+                            <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '8px', borderRadius: '8px' }}>
+                                <Target size={20} color="#3b82f6" />
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Core Values</div>
+                                <div style={{ fontWeight: 'bold' }}>Innovate • Create • Accelerate</div>
+                            </div>
+                        </div>
+
+                        {/* Widget 2: Mission */}
+                        <div className="glass-card floating-widget" style={{
+                            position: 'absolute',
+                            top: '40%',
+                            left: '-10%',
+                            maxWidth: '300px'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                                <Lightbulb size={18} color="#a855f7" />
+                                <span style={{ fontWeight: '600' }}>Our Mission</span>
+                            </div>
+                            <p style={{ margin: 0, fontSize: '0.9rem', color: '#cbd5e1', lineHeight: '1.5' }}>
+                                Empowering small businesses with scalable system solutions.
+                            </p>
+                        </div>
+
+                        {/* Widget 3: Stats */}
+                        <div className="glass-card floating-widget" style={{
+                            position: 'absolute',
+                            bottom: '-5%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            gap: '3rem',
+                            padding: '1.5rem 3rem',
+                            width: 'max-content',
+                            justifyContent: 'space-around'
+                        }}>
+                            <div>
+                                <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: '#f97316' }}>100%</div>
+                                <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '4px' }}>Reliability</div>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: '#3b82f6' }}>24/7</div>
+                                <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '4px' }}>Support</div>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: '#e2e8f0' }}>Total</div>
+                                <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '4px' }}>Dignity & Respect</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
