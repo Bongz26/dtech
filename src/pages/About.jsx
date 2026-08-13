@@ -79,7 +79,7 @@ const About = () => {
             `}</style>
 
             <div className="about-page" style={{ paddingTop: '100px', paddingBottom: '100px' }}>
-                <div className="container about-layout" style={{ display: 'flex', gap: '4rem', alignItems: 'stretch' }}>
+                <div className="container about-layout" style={{ display: 'flex', gap: '4rem', alignItems: 'flex-start' }}>
                     
                     {/* LEFT COLUMN: Content */}
                     <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '2rem', zIndex: 2 }}>
@@ -97,7 +97,7 @@ const About = () => {
                             </p>
                             <div style={{ width: '40px', height: '3px', background: '#3b82f6', marginBottom: '1rem' }}></div>
                             <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                                We build smart, reliable, and scalable solutions that help funeral service providers streamline operations, serve families better, and grow with confidence.
+                                We build smart, reliable, and scalable solutions that help organizations streamline operations, enhance client experiences, and grow with confidence.
                             </p>
                         </div>
 
@@ -156,7 +156,7 @@ const About = () => {
                                     </div>
                                     <div>
                                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>50+</div>
-                                        <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Funeral Partners</div>
+                                        <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Client Partners</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -183,7 +183,7 @@ const About = () => {
                     </div>
 
                     {/* RIGHT COLUMN: Founder Image & Bio */}
-                    <div style={{ flex: '0.8', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ flex: '0.8', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
                         
                         {/* Background Glow Effect */}
                         <div style={{ 
@@ -212,7 +212,7 @@ const About = () => {
                             position: 'relative',
                             marginTop: '-60px',
                             width: '90%',
-                            alignSelf: 'flex-end',
+                            alignSelf: 'center',
                             zIndex: 2,
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
                         }}>
@@ -221,7 +221,7 @@ const About = () => {
                                 Founder & Operations Technologist
                             </div>
                             <p style={{ color: '#cbd5e1', fontSize: '0.9rem', lineHeight: '1.6', margin: '0 0 1.5rem 0' }}>
-                                With a strong foundation in operations and technology, Bongani created Dondas Tech to bridge the gap between outdated processes and the future of funeral service management. His mission is to empower funeral homes across Africa with smart systems that bring clarity, control, and compassion to every operation.
+                                With a strong foundation in operations and technology, Bongani created Dondas Tech to bridge the gap between outdated processes and the future of digital operations management. His mission is to empower organizations across Africa with smart systems that bring clarity, control, and efficiency to every operation.
                             </p>
                             <div style={{ 
                                 fontFamily: "'Brush Script MT', 'Dancing Script', cursive", 
@@ -249,7 +249,7 @@ const About = () => {
                                     Our Vision
                                 </div>
                                 <div style={{ fontSize: '1.1rem', fontWeight: '500' }}>
-                                    To be the trusted technology partner that elevates funeral services across Africa.
+                                    To be the trusted technology partner that drives operational excellence and digital transformation across Africa.
                                 </div>
                             </div>
                         </div>
