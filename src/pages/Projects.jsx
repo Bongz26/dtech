@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Section from '../components/ui/Section';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { Link } from 'react-router-dom';
 
 import inventoryImg from '../assets/inventory-system.png';
 import portalImg from '../assets/client-portal.png';
@@ -37,7 +38,8 @@ const Projects = () => {
             category: "AI Automation",
             description: "A specialized, natural-language AI assistant built to streamline funeral service operations. Features real-time querying of mortuary capacity, fleet logistics, and inventory management.",
             tags: ["React", "AI/LLM", "Node.js"],
-            image: funeralOpsImg
+            image: funeralOpsImg,
+            demoLink: "/projects/funeralops-demo"
         }
     ];
 
@@ -104,6 +106,15 @@ const Projects = () => {
                                         </span>
                                     ))}
                                 </div>
+                                {project.demoLink && (
+                                    <div style={{ marginTop: '1.5rem' }}>
+                                        <Link to={project.demoLink} style={{ textDecoration: 'none' }}>
+                                            <Button variant="primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                                Try the Demo
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </Card>
                     ))}
