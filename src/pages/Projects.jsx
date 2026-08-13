@@ -7,6 +7,7 @@ import Button from '../components/ui/Button';
 import inventoryImg from '../assets/inventory-system.png';
 import portalImg from '../assets/client-portal.png';
 import trackerImg from '../assets/fleet-tracker.png';
+import funeralOpsImg from '../assets/funeralops-ai.jpg';
 
 const Projects = () => {
     const projects = [
@@ -30,6 +31,13 @@ const Projects = () => {
             description: "An automated tracking system for a logistics company, integrating GPS data with a central dashboard.",
             tags: ["React Native", "Google Maps API", "Express"],
             image: trackerImg
+        },
+        {
+            title: "FuneralOps AI Assistant",
+            category: "AI Automation",
+            description: "A specialized, natural-language AI assistant built to streamline funeral service operations. Features real-time querying of mortuary capacity, fleet logistics, and inventory management.",
+            tags: ["React", "AI/LLM", "Node.js"],
+            image: funeralOpsImg
         }
     ];
 
