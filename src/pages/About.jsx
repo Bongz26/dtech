@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Target, Lightbulb, Shield, Heart, Rocket, Users, CheckCircle, Globe } from 'lucide-react';
-import founderImageDark from '../assets/founder-dark.jpg';
+import founderImageDark from '../assets/bongani-dark.png';
 
 const About = () => {
     return (
