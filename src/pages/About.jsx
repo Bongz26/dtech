@@ -217,7 +217,7 @@ const About = () => {
                             width: 'calc(100% + 40px)',
                             zIndex: 2
                         }}>
-                            <h2 style={{ margin: '0 0 4px 0', fontSize: '1.75rem', fontWeight: 'bold' }}>Bongani Dondashe</h2>
+                            <h2 style={{ margin: '0 0 4px 0', fontSize: '1.75rem', fontWeight: 'bold' }}>Bongani Dondas</h2>
                             <div style={{ color: '#60a5fa', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
                                 Founder & Operations Technologist
                             </div>
