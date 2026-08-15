@@ -189,50 +189,51 @@ export default function FuneralOpsDemo() {
   ]);
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isThloloMode, setIsThloloMode] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleAsk = async (e) => {
+  const handleAsk = (e) => {
     if(e) e.preventDefault();
     if (!question.trim()) return;
 
-    const userMsg = { id: Date.now(), type: 'user', text: question };
-    setMessages(prev => [...prev, userMsg]);
-    
+    setMessages(prev => [...prev, { id: Date.now(), type: 'user', text: question }]);
     const currentQ = question;
     setQuestion('');
     setLoading(true);
 
-    try {
-      // Format history for backend
-      const history = messages
-        .filter(msg => msg.type === 'user' || msg.type === 'assistant')
-        .map(msg => ({ role: msg.type, content: msg.text }));
-
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5002';
+    setTimeout(() => {
+      let responseText = "I can help you manage operations. However, this is a portfolio demo version.";
+      const lowerQ = currentQ.toLowerCase();
+      const magicPhrases = ["reuben", "test victory", "doing the right things right"];
       
-      const response = await fetch(`${backendUrl}/api/ai/demo-ask`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: currentQ, history })
-      });
-
-      const data = await response.json();
-      
-      if (data.success) {
-        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: data.answer }]);
+      if (magicPhrases.some(p => lowerQ.includes(p))) {
+        setIsThloloMode(true);
+        responseText = "Welcome Reuben from Thlolo Victory. I have successfully loaded your operational data.";
+      } else if (isThloloMode) {
+        if (lowerQ.includes('mortuary') || lowerQ.includes('occupancy')) {
+          responseText = "We currently have 13 deceased in total.\n- Qwaqwa Mortuary: 8 Deceased (Thabo Mokoena, Sipho Ndlovu, etc.)\n- BHM Mortuary: 3 Deceased (Bongani Ngcobo, etc.)\n- Mpumalanga Mortuary: 2 Deceased (Thandiwe Mahlangu, Vusi Shabangu)";
+        } else if (lowerQ.includes('claim') || lowerQ.includes('arrangement') || lowerQ.includes('status')) {
+          responseText = "4 Families have claimed (3 in Qwaqwa, 1 in Mpumalanga). Cleansing time is scheduled for all 4. We are still pending Friday Delivery time and Saturday Service time.\n\n4 cases are unclaimed:\n- 2 have no policy (Private)\n- 1 has Optimum Cover\n- 1 has Ultimate Cover";
+        } else if (lowerQ.includes('vehicle') || lowerQ.includes('car') || lowerQ.includes('fleet')) {
+          responseText = "For the 4 claimed cases this weekend, we need 9 vehicles (4 Hearses and 5 Family Cars).\nAvailable fleet includes Thlolo 1 FS, Thlolo 2 FS, etc.\nDrivers on duty: Sibusiso, Kagiso, Tebogo, Mandla, Tshepo.";
+        } else if (lowerQ.includes('casket') || lowerQ.includes('coffin')) {
+          responseText = "Caskets for the 4 claimed cases:\n- 2x Pongee - Cherry\n- 1x 1/4 View - Kiaat\n- 1x Woven - brown / Mahony Dome\nAll 4 cases receive full Grocery benefits.";
+        } else if (lowerQ.includes('weekend') || lowerQ.includes('stock') || lowerQ.includes('tent') || lowerQ.includes('inventory')) {
+          responseText = "🚨 SHORTAGE ALERT 🚨\nWe are expecting 8 services total this weekend, which requires 8 home tents, 16 tables, 800 chairs, and 9 toilets.\n\nHowever, 2 home tents went for repairs! If we bury all 8 deceased this weekend, we will face a critical challenge because we are short on tents.";
+        } else {
+          responseText = "I'm sorry, I don't have information on that. Try asking me about mortuary occupancy, claims, fleet, or our weekend stock requirements.";
+        }
       } else {
-        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: 'Error connecting to demo server.' }]);
+        responseText = "Welcome to the FuneralOps AI Demo. Please enter your customer code or company name to load your workspace.";
       }
-    } catch (err) {
-      console.error(err);
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: 'Failed to connect to backend server. Make sure localhost:5002 is running!' }]);
-    } finally {
+
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: responseText }]);
       setLoading(false);
-    }
+    }, 1500); 
   };
 
   const handleChipClick = (text) => {
