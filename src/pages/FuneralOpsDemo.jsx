@@ -195,32 +195,44 @@ export default function FuneralOpsDemo() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleAsk = (e) => {
+  const handleAsk = async (e) => {
     if(e) e.preventDefault();
     if (!question.trim()) return;
 
-    setMessages(prev => [...prev, { id: Date.now(), type: 'user', text: question }]);
+    const userMsg = { id: Date.now(), type: 'user', text: question };
+    setMessages(prev => [...prev, userMsg]);
+    
     const currentQ = question;
     setQuestion('');
     setLoading(true);
 
-    setTimeout(() => {
-      let responseText = "I can help you manage operations. However, this is a portfolio demo version without access to the live database.";
-      
-      const lowerQ = currentQ.toLowerCase();
-      if (lowerQ.includes('mortuary') || lowerQ.includes('occupancy')) {
-        responseText = "Currently, the Head Office Mortuary is at 85% capacity (34/40 units occupied). 3 collections are scheduled for tomorrow.";
-      } else if (lowerQ.includes('vehicle') || lowerQ.includes('car') || lowerQ.includes('fleet')) {
-        responseText = "For this Saturday, 2 Hearses and 1 Family Car are available. All other fleet vehicles are booked for scheduled services.";
-      } else if (lowerQ.includes('stock') || lowerQ.includes('inventory')) {
-        responseText = "Alert: Pongee Caskets are running low (2 remaining). Programs paper stock needs to be reordered soon.";
-      } else if (lowerQ.includes('prepared') || lowerQ.includes('weekend')) {
-        responseText = "2 services this weekend are not fully prepared:\n- Mokoena Family: Awaiting casket delivery.\n- Dlamini Family: Catering not yet confirmed.";
-      }
+    try {
+      // Format history for backend
+      const history = messages
+        .filter(msg => msg.type === 'user' || msg.type === 'assistant')
+        .map(msg => ({ role: msg.type, content: msg.text }));
 
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: responseText }]);
+      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      
+      const response = await fetch(`${backendUrl}/api/ai/demo-ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: currentQ, history })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: data.answer }]);
+      } else {
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: 'Error connecting to demo server.' }]);
+      }
+    } catch (err) {
+      console.error(err);
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: 'Failed to connect to backend server. Make sure localhost:5000 is running!' }]);
+    } finally {
       setLoading(false);
-    }, 1500); 
+    }
   };
 
   const handleChipClick = (text) => {
