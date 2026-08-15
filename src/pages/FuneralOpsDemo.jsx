@@ -212,7 +212,7 @@ export default function FuneralOpsDemo() {
         .filter(msg => msg.type === 'user' || msg.type === 'assistant')
         .map(msg => ({ role: msg.type, content: msg.text }));
 
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001';
       
       const response = await fetch(`${backendUrl}/api/ai/demo-ask`, {
         method: 'POST',
@@ -229,7 +229,7 @@ export default function FuneralOpsDemo() {
       }
     } catch (err) {
       console.error(err);
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: 'Failed to connect to backend server. Make sure localhost:5000 is running!' }]);
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'assistant', text: 'Failed to connect to backend server. Make sure localhost:5001 is running!' }]);
     } finally {
       setLoading(false);
     }
