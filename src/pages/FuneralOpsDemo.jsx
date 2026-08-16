@@ -655,6 +655,67 @@ const getBubbleStyle = (type) => {
   return base;
 };
 
+const formatMessageText = (text) => {
+  if (!text) return null;
+  return text.split('\n').map((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) return <div key={index} style={{ height: '12px' }} />;
+
+    // Main Headers (All caps ending in colon, or short all caps words)
+    if (/^[A-Z\s&]+:$/.test(trimmed) || (trimmed.toUpperCase() === trimmed && trimmed.length > 5 && !trimmed.includes(' ') && !trimmed.includes('•'))) {
+      return (
+        <div key={index} style={{ 
+          color: '#38bdf8', 
+          fontWeight: '700', 
+          fontSize: '0.75rem', 
+          letterSpacing: '0.1em', 
+          marginTop: index === 0 ? 0 : '20px', 
+          marginBottom: '12px', 
+          borderBottom: '1px solid rgba(56, 189, 248, 0.2)', 
+          paddingBottom: '6px',
+          textTransform: 'uppercase'
+        }}>
+          {trimmed.replace(':', '')}
+        </div>
+      );
+    }
+
+    // Bullet points
+    if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+      const content = trimmed.substring(1).trim();
+      let innerContent = content;
+      if (content.includes(':')) {
+         const parts = content.split(':');
+         innerContent = <><strong style={{ color: '#e2e8f0', fontWeight: '600' }}>{parts[0]}:</strong>{parts.slice(1).join(':')}</>;
+      }
+      return (
+        <div key={index} style={{ display: 'flex', marginBottom: '8px', paddingLeft: '4px' }}>
+          <span style={{ color: '#38bdf8', marginRight: '12px', fontSize: '1.2em', lineHeight: '1.2' }}>▪</span>
+          <span style={{ color: '#94a3b8', lineHeight: '1.5' }}>{innerContent}</span>
+        </div>
+      );
+    }
+
+    // Lines with colons (Subheaders or key-value pairs)
+    if (trimmed.includes(':')) {
+      const parts = trimmed.split(':');
+      return (
+        <div key={index} style={{ marginBottom: '8px', lineHeight: '1.5' }}>
+          <strong style={{ color: '#e2e8f0', fontWeight: '600' }}>{parts[0]}:</strong>
+          <span style={{ color: '#94a3b8' }}>{parts.slice(1).join(':')}</span>
+        </div>
+      );
+    }
+
+    // Regular text
+    return (
+      <div key={index} style={{ marginBottom: '8px', color: '#94a3b8', lineHeight: '1.5' }}>
+        {trimmed}
+      </div>
+    );
+  });
+};
+
 export default function FuneralOpsDemo() {
   const [messages, setMessages] = useState([
     {
@@ -886,7 +947,7 @@ export default function FuneralOpsDemo() {
                       <img src={aiAvatar} alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', marginBottom: '4px', objectFit: 'cover', boxShadow: '0 0 10px rgba(59, 130, 246, 0.4)', flexShrink: 0 }} />
                     )}
                     <div style={getBubbleStyle(msg.type)}>
-                      {msg.text}
+                      {msg.type === 'assistant' ? formatMessageText(msg.text) : msg.text}
                     </div>
                   </div>
                 </div>
