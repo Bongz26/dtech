@@ -12,8 +12,6 @@ const fuzzyMatch = (input, keywords) => {
   });
 };
 
-const authKeywords = ["reuben", "test victory", "doing the right things right"];
-
 // Comprehensive demo data structure
 const createDemoData = () => ({
   company: 'Funeral Services Operations',
@@ -188,7 +186,59 @@ const createDemoData = () => ({
     family_cars_available: 6,
     drivers_on_duty: 5,
     drivers: ['Sibusiso', 'Kagiso', 'Tebogo', 'Mandla', 'Tshepo'],
-    utilization: '67%'
+    utilization: '67%',
+    vehicles: [
+      {
+        name: 'Thlolo 1 FS',
+        type: 'Hearse',
+        reg: 'THLOLO 1 FS',
+        driver: 'Sibusiso',
+        status: 'Operational',
+        last_service: '2026-08-01',
+        next_service: '2026-09-01',
+        mileage: '187,450 km'
+      },
+      {
+        name: 'Thlolo 2 FS',
+        type: 'Hearse',
+        reg: 'THLOLO 456 GP',
+        driver: 'Kagiso',
+        status: 'Operational',
+        last_service: '2026-07-28',
+        next_service: '2026-08-28',
+        mileage: '165,230 km'
+      },
+      {
+        name: 'Family Car 1',
+        type: 'Family Car',
+        reg: 'THLOLO 789 HP',
+        driver: 'Tebogo',
+        status: 'Operational',
+        last_service: '2026-08-05',
+        next_service: '2026-09-05',
+        mileage: '142,100 km'
+      },
+      {
+        name: 'Family Car 2',
+        type: 'Family Car',
+        reg: 'THLOLO 234 LP',
+        driver: 'Mandla',
+        status: 'Operational',
+        last_service: '2026-07-30',
+        next_service: '2026-08-30',
+        mileage: '156,780 km'
+      },
+      {
+        name: 'Family Car 3',
+        type: 'Family Car',
+        reg: 'THLOLO 567 FS',
+        driver: 'Thabo',
+        status: 'Operational',
+        last_service: '2026-08-03',
+        next_service: '2026-09-03',
+        mileage: '138,560 km'
+      }
+    ]
   }
 });
 
@@ -197,38 +247,38 @@ const generateWeeklyReport = (data) => {
   const totalDeceased = data.facilities.reduce((sum, f) => sum + f.deceased, 0);
   const totalClaimed = data.claims.completed_this_month;
 
-  return ` WEEKLY OPERATIONS REPORT (${data.week.start} to ${data.week.end})
+  return `WEEKLY OPERATIONS REPORT (${data.week.start} to ${data.week.end})
 
- MORTUARY STATUS:
+MORTUARY STATUS:
 • Total Deceased: ${totalDeceased} across ${data.facilities.length} facilities
 • Claimed Cases: ${totalClaimed}
 • Completion Rate: ${data.claims.on_time_completion}% on time
-${data.facilities.map(f => `   ${f.name}: ${f.deceased} deceased (${f.claimed} claimed, ${f.unclaimed} unclaimed) - ${f.capacity_used} capacity`).join('\n')}
+${data.facilities.map(f => `  • ${f.name}: ${f.deceased} deceased (${f.claimed} claimed, ${f.unclaimed} unclaimed) - ${f.capacity_used} capacity`).join('\n')}
 
- CASE MANAGEMENT:
+CASE MANAGEMENT:
 • Cases Completed: ${data.claims.completed_this_month} this month
 • On-Time Delivery: ${data.claims.on_time_completion}%
 • Overdue Cases: ${data.claims.overdue_count}
 • Average Completion Time: ${data.claims.avg_days_to_completion} days
 
- PLAN PERFORMANCE:
+PLAN PERFORMANCE:
 • Supreme Cover: ${data.plans['Supreme Cover'].cases_this_month} cases (Satisfaction: ${data.plans['Supreme Cover'].customer_satisfaction}/10)
 • Ultimate Cover: ${data.plans['Ultimate Cover'].cases_this_month} cases (Satisfaction: ${data.plans['Ultimate Cover'].customer_satisfaction}/10)
 • Optimum Cover: ${data.plans['Optimum Cover'].cases_this_month} cases (Satisfaction: ${data.plans['Optimum Cover'].customer_satisfaction}/10)
 • Standard Cover: ${data.plans['Standard Cover'].cases_this_month} cases (Satisfaction: ${data.plans['Standard Cover'].customer_satisfaction}/10)
 • Basic Cover: ${data.plans['Basic Cover'].cases_this_month} cases (Satisfaction: ${data.plans['Basic Cover'].customer_satisfaction}/10)
 
- WEEKEND FORECAST (Aug 15-17):
+WEEKEND FORECAST (Aug 15-17):
 • Services Scheduled: ${data.weekend.services_scheduled}
 • Expected Revenue: ${data.weekend.expected_revenue}
 • Staff Allocated: ${data.weekend.staff_allocated}/${data.weekend.staff_available}
 
- CRITICAL ALERTS:
-${data.weekend.shortage_alert ? `• ️ INVENTORY SHORTAGE: ${data.weekend.shortage_details}` : '•  Inventory adequate'}
+CRITICAL ALERTS:
+${data.weekend.shortage_alert ? `• INVENTORY SHORTAGE: ${data.weekend.shortage_details}` : '• Inventory adequate'}
 • ${data.claims.overdue_count} cases overdue in scheduling
 • Capacity Utilization: ${Math.round((data.claims.total_cases / data.staff.peak_capacity) * 100)}%
 
- ACTION ITEMS:
+ACTION ITEMS:
 1. Resolve tent shortage before weekend
 2. Contact families on ${data.claims.overdue_count} overdue cases
 3. Prepare for Week 3 surge (${data.forecast.week_3.expected_cases} expected cases)
@@ -236,7 +286,7 @@ ${data.weekend.shortage_alert ? `• ️ INVENTORY SHORTAGE: ${data.weekend.shor
 };
 
 const generatePlanPerformance = (data) => {
-  return ` PLAN PERFORMANCE ANALYSIS
+  return `PLAN PERFORMANCE ANALYSIS
 
 REVENUE BREAKDOWN (This Month):
 ${Object.entries(data.plans).map(([name, plan]) => 
@@ -248,16 +298,16 @@ ${Object.entries(data.plans).map(([name, plan]) =>
   • Popular Add-ons: ${plan.popular_addons.length > 0 ? plan.popular_addons.join(', ') : 'None'}`
 ).join('\n\n')}
 
- TOTAL PLAN REVENUE: R920,000
+TOTAL PLAN REVENUE: R920,000
 
- TOP PERFORMING PLAN:
+TOP PERFORMING PLAN:
 Supreme Cover - Highest satisfaction (${data.plans['Supreme Cover'].customer_satisfaction}/10) & strong margins (${data.plans['Supreme Cover'].margin})
 
- GROWTH OPPORTUNITY:
+GROWTH OPPORTUNITY:
 Ultimate & Optimum covers have highest volume (${data.plans['Ultimate Cover'].cases_this_month + data.plans['Optimum Cover'].cases_this_month} combined cases)
 → Focus marketing here for sustainable growth
 
- RECOMMENDATION:
+RECOMMENDATION:
 Premium tier (Supreme + Ultimate) = 20 cases, 82% satisfaction
 Mid tier = 30 cases, 91% satisfaction  
 Budget tier = 10 cases, 85% satisfaction
@@ -265,30 +315,30 @@ Budget tier = 10 cases, 85% satisfaction
 };
 
 const generateRevenueOpportunity = (data) => {
-  return ` REVENUE OPPORTUNITY ANALYSIS
+  return `REVENUE OPPORTUNITY ANALYSIS
 
 CURRENT ADD-ON PERFORMANCE:
 
-️ Catering:
+Catering:
 • Uptake Rate: ${data.addons.Catering.uptake_rate} (${data.addons.Catering.cases_using}/${data.addons.Catering.total_cases} cases)
 • Revenue per Case: ${data.addons.Catering.avg_revenue_per_case}
 • Total Monthly Revenue: ${data.addons.Catering.total_revenue}
 • Customer Satisfaction: ${data.addons.Catering.customer_satisfaction}/10
 • OPPORTUNITY: ${(data.addons.Catering.total_cases - data.addons.Catering.cases_using)} untapped cases
 
- Flowers & Decorations:
+Flowers & Decorations:
 • Uptake Rate: ${data.addons['Flowers & Decorations'].uptake_rate} (${data.addons['Flowers & Decorations'].cases_using}/${data.addons['Flowers & Decorations'].total_cases} cases)
 • Revenue per Case: ${data.addons['Flowers & Decorations'].avg_revenue_per_case}
 • Total Monthly Revenue: ${data.addons['Flowers & Decorations'].total_revenue}
 • Customer Satisfaction: ${data.addons['Flowers & Decorations'].customer_satisfaction}/10
 • OPPORTUNITY: ${(data.addons['Flowers & Decorations'].total_cases - data.addons['Flowers & Decorations'].cases_using)} untapped cases
 
- UNTAPPED REVENUE:
+UNTAPPED REVENUE:
 • Catering potential: ${(data.addons.Catering.total_cases - data.addons.Catering.cases_using) * 2500} (at R2,500/case)
 • Flowers potential: ${(data.addons['Flowers & Decorations'].total_cases - data.addons['Flowers & Decorations'].cases_using) * 1800} (at R1,800/case)
 • TOTAL UPSELL OPPORTUNITY: R45,000 this month!
 
- ACTION PLAN:
+ACTION PLAN:
 1. Target Supreme/Ultimate cases for catering (highest satisfaction)
 2. Bundle flowers package with mid-tier plans
 3. Train staff on add-on recommendations
@@ -297,7 +347,7 @@ CURRENT ADD-ON PERFORMANCE:
 };
 
 const generateStaffUtilization = (data) => {
-  return ` STAFF UTILIZATION & CAPACITY ANALYSIS
+  return `STAFF UTILIZATION & CAPACITY ANALYSIS
 
 CURRENT STATUS:
 • Team Size: ${data.staff.total_team}
@@ -311,7 +361,7 @@ CAPACITY ANALYSIS:
 • Peak Capacity: ${data.staff.peak_capacity} cases/week
 • Current Load: ${data.staff.cases_handled} cases (${Math.round((data.staff.cases_handled / data.staff.peak_capacity) * 100)}%)
 • Available Capacity: ${data.staff.available_capacity}
-• Status: ${data.staff.can_handle_more ? ' CAN HANDLE MORE' : '️ AT CAPACITY'}
+• Status: ${data.staff.can_handle_more ? 'CAN HANDLE MORE' : 'AT CAPACITY'}
 
 WORKLOAD DISTRIBUTION:
 • Average cases per staff: ${Math.round(data.staff.cases_handled / data.staff.active_this_week)} cases
@@ -323,7 +373,7 @@ FORECAST IMPACT:
 • Status: CRITICAL - Will exceed capacity
 • Recommendation: ${data.forecast.staffing_recommendation}
 
- RECOMMENDATION:
+RECOMMENDATION:
 • Hire 1 temporary staff for Week 3
 • Cross-train 2 staff on advanced case management
 • Implement workload balancing
@@ -331,7 +381,7 @@ FORECAST IMPACT:
 };
 
 const generateOnTimeDelivery = (data) => {
-  return `⏱️ ON-TIME DELIVERY & COMPLETION ANALYSIS
+  return `ON-TIME DELIVERY & COMPLETION ANALYSIS
 
 CURRENT PERFORMANCE:
 • On-Time Completion Rate: ${data.claims.on_time_completion}%
@@ -341,13 +391,13 @@ CURRENT PERFORMANCE:
 • Average Completion Time: ${data.claims.avg_days_to_completion} days
 
 CASE STAGE ANALYSIS:
-• Cleansing Scheduled: ${data.claims.cleansing_scheduled}/${data.claims.total_cases} 
-• Delivery Pending: ${data.claims.delivery_pending} cases  ACTION NEEDED
-• Service Pending: ${data.claims.service_pending} cases  ACTION NEEDED
+• Cleansing Scheduled: ${data.claims.cleansing_scheduled}/${data.claims.total_cases}
+• Delivery Pending: ${data.claims.delivery_pending} cases (ACTION NEEDED)
+• Service Pending: ${data.claims.service_pending} cases (ACTION NEEDED)
 • Total Pending Final Steps: ${data.claims.delivery_pending + data.claims.service_pending}
 
 BOTTLENECK IDENTIFICATION:
- PROBLEM AREA: Delivery scheduling (${data.claims.delivery_pending} cases delayed)
+PROBLEM AREA: Delivery scheduling (${data.claims.delivery_pending} cases delayed)
   → Root cause: Family confirmation delays
   → Action: Implement automated family contact system
   → Expected improvement: +15% on-time rate
@@ -357,7 +407,7 @@ SATISFACTION CORRELATION:
 • Cases delayed: 7.2/10 satisfaction
 • Impact: On-time delivery = 2.2 point satisfaction boost
 
- RECOMMENDATIONS:
+RECOMMENDATIONS:
 1. Follow up on ${data.claims.delivery_pending} overdue deliveries immediately
 2. Set automatic reminders at Day 3 for family confirmations
 3. Provide delivery time options within 24 hours of cleansing
@@ -365,7 +415,7 @@ SATISFACTION CORRELATION:
 };
 
 const generateCustomerSatisfaction = (data) => {
-  return ` CUSTOMER SATISFACTION ANALYSIS
+  return `CUSTOMER SATISFACTION ANALYSIS
 
 OVERALL RATING: ${data.satisfaction.overall_rating}/10
 NPS Score: ${data.satisfaction.nps_score} (Strong - Industry leading)
@@ -375,10 +425,10 @@ ${Object.entries(data.satisfaction.by_plan).map(([plan, rating]) =>
   `• ${plan}: ${rating}/10`
 ).join('\n')}
 
- POSITIVE FEEDBACK THEMES:
+POSITIVE FEEDBACK THEMES:
 ${data.satisfaction.positive_feedback.map(f => `• ${f}`).join('\n')}
 
-️ AREAS FOR IMPROVEMENT:
+AREAS FOR IMPROVEMENT:
 ${data.satisfaction.areas_for_improvement.map(a => `• ${a}`).join('\n')}
 
 CORRELATION WITH ADD-ONS:
@@ -392,7 +442,7 @@ PLAN-BASED INSIGHTS:
 • Mid-tier plans: 8.9-9.2/10 (good value perception)
 • Budget plans: 8.5/10 (still strong, but room for improvement)
 
- ACTION PLAN:
+ACTION PLAN:
 1. Train staff on Supreme Cover service standards
 2. Implement catering for Budget cover cases (satisfaction boost)
 3. Create "satisfaction guarantee" for Standard/Basic plans
@@ -401,34 +451,34 @@ PLAN-BASED INSIGHTS:
 };
 
 const generateDemandForecast = (data) => {
-  return ` 30-DAY DEMAND FORECAST
+  return `30-DAY DEMAND FORECAST
 
 CASE PROJECTIONS:
 • Week 1 (Aug 11-17): ${data.forecast.week_1.expected_cases} cases - ${data.forecast.week_1.utilization} capacity utilization
 • Week 2 (Aug 18-24): ${data.forecast.week_2.expected_cases} cases - ${data.forecast.week_2.utilization} capacity utilization
-• Week 3 (Aug 25-31): ${data.forecast.week_3.expected_cases} cases - ${data.forecast.week_3.utilization} capacity utilization  CRITICAL
+• Week 3 (Aug 25-31): ${data.forecast.week_3.expected_cases} cases - ${data.forecast.week_3.utilization} capacity utilization (CRITICAL)
 • Week 4 (Sep 1-7): ${data.forecast.week_4.expected_cases} cases - ${data.forecast.week_4.utilization} capacity utilization
 
 TOTAL EXPECTED: ${data.forecast.total_expected} cases
 
-️ PEAK WEEK ALERT:
+PEAK WEEK ALERT:
 ${data.forecast.peak_week} will be extremely busy!
 • Expected cases: ${data.forecast.week_3.expected_cases}
 • Capacity: ${Math.round((data.forecast.week_3.expected_cases / data.staff.peak_capacity) * 100)}% utilization
-• Status: ${data.forecast.week_3.critical_weeks ? ' CRITICAL - EXCEEDS CAPACITY' : ' MANAGEABLE'}
+• Status: ${data.forecast.week_3.critical_weeks ? 'CRITICAL - EXCEEDS CAPACITY' : 'MANAGEABLE'}
 
- RESOURCE PLANNING:
+RESOURCE PLANNING:
 • Current staff peak capacity: ${data.staff.peak_capacity} cases/week
 • Week 3 demand: ${data.forecast.week_3.expected_cases} cases
 • Shortfall: ${data.forecast.week_3.expected_cases - data.staff.peak_capacity} cases
 • Recommendation: ${data.forecast.staffing_recommendation}
 
- REVENUE PROJECTION:
+REVENUE PROJECTION:
 • Expected monthly revenue: ${data.revenue.this_month_projected}
 • With add-on increases: +R${data.revenue.upsell_opportunity}
 • Revised projection: ~R965,000
 
- STRATEGIC RECOMMENDATIONS:
+STRATEGIC RECOMMENDATIONS:
 1. Begin temp staff recruitment NOW (before Week 3)
 2. Increase catering/flowers marketing (add-on revenue)
 3. Pre-book premium plans for Week 3
@@ -438,7 +488,7 @@ ${data.forecast.peak_week} will be extremely busy!
 };
 
 const generateStrategicRecommendations = (data) => {
-  return ` STRATEGIC RECOMMENDATIONS
+  return `STRATEGIC RECOMMENDATIONS
 
 IMMEDIATE (This Week):
 1. Resolve inventory shortage → Arrange tent repairs/rentals
@@ -464,12 +514,12 @@ LONG-TERM (Q3-Q4):
 3. Implement staff retention program → Top performer retention critical
 4. Build add-on revenue stream → Currently R142,700/month - can reach R200,000+
 
- REVENUE IMPACT:
+REVENUE IMPACT:
 • Current monthly: ${data.revenue.this_month_projected}
 • With recommendations: ~R1,050,000 (+14% growth)
 • Key driver: Add-on optimization + capacity increase
 
- KEY METRICS TO MONITOR:
+KEY METRICS TO MONITOR:
 1. On-time delivery % (Target: 95%)
 2. Add-on uptake rate (Target: Catering 65%, Flowers 80%)
 3. Customer satisfaction (Target: 9.5/10)
@@ -721,7 +771,7 @@ export default function FuneralOpsDemo() {
     {
       id: 1,
       type: 'assistant',
-      text: "Hello!  I'm your Funeral Services AI Assistant. Welcome to Dondas Technologies.\n\nI can help you with:\n\n OPERATIONAL:\n• Mortuary occupancy & inventory\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\n BUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nTry asking me anything!",
+      text: "Hello! I'm your Funeral Services AI Assistant. Welcome to Dondas Technologies.\n\nI can help you with:\n\nOPERATIONAL:\n• Mortuary occupancy & inventory\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nTry asking me anything!",
       timestamp: new Date()
     }
   ]);
@@ -731,18 +781,35 @@ export default function FuneralOpsDemo() {
   const [authMode, setAuthMode] = useState(null); // 'vanessa' or 'demo'
   const [demoData, setDemoData] = useState(null);
   const messagesEndRef = useRef(null);
+  
+  const authKeywords = ["reuben", "test victory", "doing the right things right"];
 
   // Sanitize data for Vanessa (remove specific client references)
   const sanitizeForVanessa = (text) => {
     if (authMode !== 'vanessa') return text;
     
     return text
+      // Replace company name
+      .replace(/Thlolo Victory/g, 'Funeral Service')
+      .replace(/Tlholo Victory/g, 'Funeral Service')
+      .replace(/THLOLO VICTORY/g, 'FUNERAL SERVICE')
       // Replace specific fleet names with generic
       .replace(/Thlolo 1 FS/g, 'Fleet Unit 1')
       .replace(/Thlolo 2 FS/g, 'Fleet Unit 2')
-      .replace(/Thlolo Victory/g, 'Funeral Service')
-      .replace(/Tlholo Victory/g, 'Funeral Service')
+      // Replace vehicle registrations with generic
+      .replace(/THLOLO 1 FS/g, 'VEH-001-ZA')
+      .replace(/THLOLO 456 GP/g, 'VEH-002-ZA')
+      .replace(/THLOLO 789 HP/g, 'VEH-003-ZA')
+      .replace(/THLOLO 234 LP/g, 'VEH-004-ZA')
+      .replace(/THLOLO 567 FS/g, 'VEH-005-ZA')
+      // Replace family car names
+      .replace(/Family Car 1/g, 'Vehicle 1')
+      .replace(/Family Car 2/g, 'Vehicle 2')
+      .replace(/Family Car 3/g, 'Vehicle 3')
       // Replace branch names
+      .replace(/Qwaqwa Branch/g, 'Branch A')
+      .replace(/Bethlehem Branch/g, 'Branch B')
+      .replace(/Reitz Branch/g, 'Branch C')
       .replace(/Qwaqwa/g, 'Branch A')
       .replace(/Bethlehem/g, 'Branch B')
       .replace(/Reitz/g, 'Branch C')
@@ -752,13 +819,14 @@ export default function FuneralOpsDemo() {
       .replace(/Kagiso/g, 'Driver 2')
       .replace(/Tebogo/g, 'Driver 3')
       .replace(/Mandla/g, 'Driver 4')
-      .replace(/Tshepo/g, 'Driver 5')
+      .replace(/Thabo/g, 'Driver 5')
       // Replace mortuary names
       .replace(/Qwaqwa Mortuary/g, 'Primary Mortuary')
       .replace(/BHM Mortuary/g, 'Secondary Mortuary')
       .replace(/Branch Facility/g, 'Tertiary Facility')
       .replace(/Main Mortuary/g, 'Primary Mortuary')
       .replace(/Secondary Mortuary/g, 'Secondary Mortuary')
+      .replace(/Primary Mortuary/g, 'Primary Mortuary')
       .replace(/Head Office/g, 'Head Office')
       // Keep the functionality, just generic names
       .replace(/THS-/g, 'CASE-');
@@ -789,31 +857,35 @@ export default function FuneralOpsDemo() {
           setIsAuthenticated(true);
           setAuthMode('vanessa');
           setDemoData(data);
-          responseText = ` Welcome Vanessa! This is Dondas Tech AI Manager\n\nFor Funeral Service Operations\n\nYou can ask me about:\n\n OPERATIONS:\n• Mortuary occupancy & deceased tracking\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\n BUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nThis is a test environment with generic data.\n\nWhat would you like to explore?`;
+          responseText = `Welcome Vanessa! This is Dondas Tech AI Manager\n\nFor Funeral Service Operations\n\nYou can ask me about:\n\nOPERATIONS:\n• Mortuary occupancy & deceased tracking\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nThis is a test environment with generic data.\n\nWhat would you like to explore?`;
         } else if (authKeywords.some(k => lowerQ.includes(k))) {
           setIsAuthenticated(true);
           setAuthMode('demo');
           setDemoData(data);
-          responseText = ` Welcome to Dondas Technologies AI Demo!\n\nI've loaded comprehensive funeral service operational data.\n\nYou can now ask me about:\n\n OPERATIONS: Mortuary status, inventory, arrangements, weekend planning, fleet\n BUSINESS: Plans, revenue, staff, satisfaction, forecasts, recommendations\n\nWhat would you like to know?`;
+          responseText = `Welcome to Dondas Technologies AI Demo!\n\nI've loaded comprehensive funeral service operational data.\n\nYou can now ask me about:\n\nOPERATIONS: Mortuary status, inventory, arrangements, weekend planning, fleet\nBUSINESS: Plans, revenue, staff, satisfaction, forecasts, recommendations\n\nWhat would you like to know?`;
         } else {
           responseText = `Hello! Type "start demo" or "show me" to begin exploring funeral service operations with AI-powered insights.\n\n(Or type "vanessa" for test mode)`;
         }
       } else {
         // OPERATIONAL QUERIES
         if (fuzzyMatch(lowerQ, ['mortuary', 'occupancy', 'deceased', 'facilities', 'status'])) {
-          responseText = ` MORTUARY OCCUPANCY STATUS\n\n${data.facilities.map(f => `${f.name}:\n  • Total Deceased: ${f.deceased}\n  • Claimed: ${f.claimed}\n  • Unclaimed: ${f.unclaimed}\n  • Capacity Used: ${f.capacity_used}`).join('\n\n')}\n\n OVERALL:\n• Total Deceased: ${data.facilities.reduce((sum, f) => sum + f.deceased, 0)}\n• Total Claimed: ${data.facilities.reduce((sum, f) => sum + f.claimed, 0)}\n• Total Unclaimed: ${data.facilities.reduce((sum, f) => sum + f.unclaimed, 0)}\n• Family Response Rate: ${Math.round((data.facilities.reduce((sum, f) => sum + f.claimed, 0) / data.facilities.reduce((sum, f) => sum + f.deceased, 0)) * 100)}%`;
+          responseText = `MORTUARY OCCUPANCY STATUS\n\n${data.facilities.map(f => `${f.name}:\n  • Total Deceased: ${f.deceased}\n  • Claimed: ${f.claimed}\n  • Unclaimed: ${f.unclaimed}\n  • Capacity Used: ${f.capacity_used}`).join('\n\n')}\n\nOVERALL:\n• Total Deceased: ${data.facilities.reduce((sum, f) => sum + f.deceased, 0)}\n• Total Claimed: ${data.facilities.reduce((sum, f) => sum + f.claimed, 0)}\n• Total Unclaimed: ${data.facilities.reduce((sum, f) => sum + f.unclaimed, 0)}\n• Family Response Rate: ${Math.round((data.facilities.reduce((sum, f) => sum + f.claimed, 0) / data.facilities.reduce((sum, f) => sum + f.deceased, 0)) * 100)}%`;
+        }
+        // NEW: Which funeral service?
+        else if (fuzzyMatch(lowerQ, ['which', 'funeral', 'service', 'company', 'organization', 'name', 'who'])) {
+          responseText = `FUNERAL SERVICE INFORMATION\n\nCompany: THLOLO VICTORY FUNERAL SERVICES\n\nLOCATIONS:\n• Primary Mortuary (Qwaqwa Branch)\n• Secondary Mortuary (Bethlehem Branch)\n• Tertiary Facility (Reitz Branch)\n\nOPERATIONAL STAFF:\n• Management: Director + Branch Managers\n• Operations: 8 core team members\n• Fleet: 5 drivers (Sibusiso, Kagiso, Tebogo, Mandla, Thabo)\n\nFOCUS AREAS:\n• Multiple plan tiers (Supreme to Basic)\n• Premium services (Catering, Flowers, Decorations)\n• Full logistics coordination\n• Customer satisfaction focus (9.2/10)\n\nThis is Thlolo Victory Funeral Services - serving communities across Free State Province.`;
         }
         else if (fuzzyMatch(lowerQ, ['weekend', 'saturday', 'sunday', 'services', 'schedule', 'capacity'])) {
-          responseText = ` WEEKEND SERVICES FORECAST\n\n SCHEDULED SERVICES: ${data.weekend.services_scheduled}\n• Expected Revenue: ${data.weekend.expected_revenue}\n• Staff Allocated: ${data.weekend.staff_allocated}/${data.weekend.staff_available}\n\n CAPACITY ANALYSIS:\n• Tents: ${data.weekend.tents_available}/${data.weekend.tents_needed} available (${Math.round((data.weekend.tents_available/data.weekend.tents_needed)*100)}%) ${data.weekend.shortage_alert ? '️ SHORTAGE!' : ' OK'}\n\n${data.weekend.shortage_alert ? ` ALERT: ${data.weekend.shortage_details}\n RECOMMENDATION: Arrange emergency rentals immediately. This is critical for weekend success.` : ' All systems go for the weekend!'}`;
+          responseText = `WEEKEND SERVICES FORECAST\n\nSCHEDULED SERVICES: ${data.weekend.services_scheduled}\n• Expected Revenue: ${data.weekend.expected_revenue}\n• Staff Allocated: ${data.weekend.staff_allocated}/${data.weekend.staff_available}\n\nCAPACITY ANALYSIS:\n• Tents: ${data.weekend.tents_available}/${data.weekend.tents_needed} available (${Math.round((data.weekend.tents_available/data.weekend.tents_needed)*100)}%) ${data.weekend.shortage_alert ? 'SHORTAGE!' : 'OK'}\n\n${data.weekend.shortage_alert ? `ALERT: ${data.weekend.shortage_details}\nRECOMMENDATION: Arrange emergency rentals immediately. This is critical for weekend success.` : 'All systems go for the weekend!'}`;
         }
         else if (fuzzyMatch(lowerQ, ['claim', 'arrangement', 'arrangements', 'scheduling', 'pending'])) {
-          responseText = ` CLAIM & ARRANGEMENT STATUS\n\nTOTAL CASES: ${data.claims.total_cases}\n• Completed: ${data.claims.completed_this_month}\n• On-Time: ${data.claims.on_time_completion}%\n• Overdue: ${data.claims.overdue_count}\n\nSTAGE BREAKDOWN:\n Cleansing Scheduled: ${data.claims.cleansing_scheduled}/${data.claims.total_cases}\n Delivery Pending: ${data.claims.delivery_pending} cases\n Service Pending: ${data.claims.service_pending} cases\n\nAVERAGE COMPLETION TIME: ${data.claims.avg_days_to_completion} days\n\n ACTION: Contact ${data.claims.overdue_count} families for delivery/service confirmations`;
+          responseText = `CLAIM & ARRANGEMENT STATUS\n\nTOTAL CASES: ${data.claims.total_cases}\n• Completed: ${data.claims.completed_this_month}\n• On-Time: ${data.claims.on_time_completion}%\n• Overdue: ${data.claims.overdue_count}\n\nSTAGE BREAKDOWN:\n• Cleansing Scheduled: ${data.claims.cleansing_scheduled}/${data.claims.total_cases}\n• Delivery Pending: ${data.claims.delivery_pending} cases\n• Service Pending: ${data.claims.service_pending} cases\n\nAVERAGE COMPLETION TIME: ${data.claims.avg_days_to_completion} days\n\nACTION: Contact ${data.claims.overdue_count} families for delivery/service confirmations`;
         }
         else if (fuzzyMatch(lowerQ, ['stock', 'inventory', 'supplies', 'fridge', 'casket', 'tent', 'chair', 'table', 'supplies'])) {
-          responseText = ` INVENTORY & STOCK STATUS\n\n ADEQUATE ITEMS:\n${data.stock.adequate_items.map(item => `  • ${item}`).join('\n')}\n\n️ LOW STOCK ITEMS:\n${data.stock.low_items.map(item => `  • ${item}`).join('\n')}\n\n REQUIRES REORDERING:\n${data.stock.reorder_needed.map(item => `  • ${item}`).join('\n')}\n\nLast Restocked: ${data.stock.last_restocked}\n\n RECOMMENDATION: Priority - resolve tent shortage before weekend. Long-term: expand inventory by 3 home tents.`;
+          responseText = `INVENTORY & STOCK STATUS\n\nADEQUATE ITEMS:\n${data.stock.adequate_items.map(item => `  • ${item}`).join('\n')}\n\nLOW STOCK ITEMS:\n${data.stock.low_items.map(item => `  • ${item}`).join('\n')}\n\nREQUIRES REORDERING:\n${data.stock.reorder_needed.map(item => `  • ${item}`).join('\n')}\n\nLast Restocked: ${data.stock.last_restocked}\n\nRECOMMENDATION: Priority - resolve tent shortage before weekend. Long-term: expand inventory by 3 home tents.`;
         }
-        else if (fuzzyMatch(lowerQ, ['fleet', 'vehicles', 'cars', 'hearses', 'drivers', 'logistics', 'transport'])) {
-          responseText = ` FLEET STATUS & ALLOCATION\n\nWEEKEND REQUIREMENTS (${data.weekend.services_scheduled} services):\n• Hearses: ${data.fleet.hearses_needed} needed | ${data.fleet.hearses_available} available \n• Family Cars: ${data.fleet.family_cars_needed} needed | ${data.fleet.family_cars_available} available \n\n DRIVERS ON DUTY (${data.fleet.drivers_on_duty} total):\n${data.fleet.drivers.map((d, i) => `  ${i + 1}. ${d}`).join('\n')}\n\n UTILIZATION: ${data.fleet.utilization}%\n\n STATUS: Fully resourced for weekend operations`;
+        else if (fuzzyMatch(lowerQ, ['fleet', 'vehicles', 'cars', 'hearses', 'drivers', 'logistics', 'transport', 'registration', 'reg', 'plate'])) {
+          responseText = `FLEET STATUS & ALLOCATION\n\nWEEKEND REQUIREMENTS (${data.weekend.services_scheduled} services):\n• Hearses: ${data.fleet.hearses_needed} needed | ${data.fleet.hearses_available} available\n• Family Cars: ${data.fleet.family_cars_needed} needed | ${data.fleet.family_cars_available} available\n\nDETAILED VEHICLE REGISTRY:\n\nHEARSES:\n  1. ${data.fleet.vehicles[0].name}\n     • Registration: ${data.fleet.vehicles[0].reg}\n     • Driver: ${data.fleet.vehicles[0].driver}\n     • Status: ${data.fleet.vehicles[0].status}\n     • Mileage: ${data.fleet.vehicles[0].mileage}\n     • Last Service: ${data.fleet.vehicles[0].last_service}\n     • Next Service: ${data.fleet.vehicles[0].next_service}\n\n  2. ${data.fleet.vehicles[1].name}\n     • Registration: ${data.fleet.vehicles[1].reg}\n     • Driver: ${data.fleet.vehicles[1].driver}\n     • Status: ${data.fleet.vehicles[1].status}\n     • Mileage: ${data.fleet.vehicles[1].mileage}\n     • Last Service: ${data.fleet.vehicles[1].last_service}\n     • Next Service: ${data.fleet.vehicles[1].next_service}\n\nFAMILY CARS:\n  1. ${data.fleet.vehicles[2].name}\n     • Registration: ${data.fleet.vehicles[2].reg}\n     • Driver: ${data.fleet.vehicles[2].driver}\n     • Status: ${data.fleet.vehicles[2].status}\n     • Mileage: ${data.fleet.vehicles[2].mileage}\n     • Last Service: ${data.fleet.vehicles[2].last_service}\n     • Next Service: ${data.fleet.vehicles[2].next_service}\n\n  2. ${data.fleet.vehicles[3].name}\n     • Registration: ${data.fleet.vehicles[3].reg}\n     • Driver: ${data.fleet.vehicles[3].driver}\n     • Status: ${data.fleet.vehicles[3].status}\n     • Mileage: ${data.fleet.vehicles[3].mileage}\n     • Last Service: ${data.fleet.vehicles[3].last_service}\n     • Next Service: ${data.fleet.vehicles[3].next_service}\n\n  3. ${data.fleet.vehicles[4].name}\n     • Registration: ${data.fleet.vehicles[4].reg}\n     • Driver: ${data.fleet.vehicles[4].driver}\n     • Status: ${data.fleet.vehicles[4].status}\n     • Mileage: ${data.fleet.vehicles[4].mileage}\n     • Last Service: ${data.fleet.vehicles[4].last_service}\n     • Next Service: ${data.fleet.vehicles[4].next_service}\n\nUTILIZATION: ${data.fleet.utilization}\n\nSTATUS: Fully resourced for weekend operations\nALL VEHICLES: Current on maintenance\nALL DRIVERS: On duty and ready`;
         }
 
         // BUSINESS INTELLIGENCE QUERIES
@@ -842,7 +914,7 @@ export default function FuneralOpsDemo() {
           responseText = generateWeeklyReport(data);
         }
         else {
-          responseText = `I understand you're asking: "${currentQ}"\n\nI can provide insights on:\n\n OPERATIONS:\n• Mortuary occupancy & facilities\n• Funeral arrangements & scheduling  \n• Inventory & stock levels\n• Weekend capacity planning\n• Fleet availability\n\n BUSINESS INTELLIGENCE:\n• Plan performance & revenue\n• Revenue opportunities & add-ons\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction\n• Demand forecasting\n• Strategic recommendations\n\nPlease rephrase your question or choose one of these topics.`;
+          responseText = `I understand you're asking: "${currentQ}"\n\nI can provide insights on:\n\nOPERATIONS:\n• Mortuary occupancy & facilities\n• Funeral arrangements & scheduling  \n• Inventory & stock levels\n• Weekend capacity planning\n• Fleet availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance & revenue\n• Revenue opportunities & add-ons\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction\n• Demand forecasting\n• Strategic recommendations\n\nPlease rephrase your question or choose one of these topics.`;
         }
       }
 
@@ -862,9 +934,8 @@ export default function FuneralOpsDemo() {
     "How's our weekend look?",
     "Plan performance analysis",
     "Revenue opportunities?",
-    "Staff utilization status",
-    "Demand forecast next month",
-    "Strategic recommendations"
+    "car reg?",
+    "which funeral service?"
   ] : [
     "Start demo",
     "Vanessa mode (test)",
@@ -880,11 +951,11 @@ export default function FuneralOpsDemo() {
       
       <div style={{ paddingTop: '8rem', paddingBottom: '2rem', background: 'linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg))', textAlign: 'center' }}>
         <div className="container">
-          <h1> Dondas Technologies</h1>
+          <h1>Dondas Technologies</h1>
           <p className="text-muted" style={{ fontSize: '1.25rem' }}>
             AI-Powered Funeral Services Intelligence Platform
           </p>
-          {isAuthenticated && <p style={{ color: '#10b981', fontWeight: 'bold' }}> Demo Mode Active</p>}
+          {isAuthenticated && <p style={{ color: '#10b981', fontWeight: 'bold' }}>Demo Mode Active</p>}
         </div>
       </div>
 
@@ -929,8 +1000,8 @@ export default function FuneralOpsDemo() {
                 <h2 style={baseStyles.title}>Funeral Services Intelligence AI</h2>
                 <p style={baseStyles.subtitle}>
                   {!isAuthenticated && 'Ready to demo'}
-                  {isAuthenticated && authMode === 'vanessa' && ' Vanessa Test Mode (Sanitized)'}
-                  {isAuthenticated && authMode === 'demo' && ' Demo Mode Active'}
+                  {isAuthenticated && authMode === 'vanessa' && 'Vanessa Test Mode (Sanitized)'}
+                  {isAuthenticated && authMode === 'demo' && 'Demo Mode Active'}
                 </p>
               </div>
             </div>
