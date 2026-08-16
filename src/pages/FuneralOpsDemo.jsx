@@ -3,12 +3,22 @@ import { Helmet } from 'react-helmet-async';
 import Section from '../components/ui/Section';
 import aiAvatar from '../assets/ai_orb_icon.jpg';
 
-// Fuzzy string matching for better question understanding
+// Enhanced Fuzzy matching to catch natural language phrases
 const fuzzyMatch = (input, keywords) => {
   const lowerInput = input.toLowerCase();
+  // Check for multi-word phrase matches first
+  const hasPhraseMatch = keywords.some(keyword => {
+    if (keyword.includes(' ')) {
+      return lowerInput.includes(keyword);
+    }
+    return false;
+  });
+  if (hasPhraseMatch) return true;
+
+  // Then check individual keywords
   return keywords.some(keyword => {
-    const matches = keyword.split(' ').every(word => lowerInput.includes(word));
-    return matches;
+    if (keyword.includes(' ')) return false; // Handled above
+    return lowerInput.includes(keyword);
   });
 };
 
@@ -242,12 +252,14 @@ const createDemoData = () => ({
   }
 });
 
-// Report generators
+// Report generators with conversational phrasing added
 const generateWeeklyReport = (data) => {
   const totalDeceased = data.facilities.reduce((sum, f) => sum + f.deceased, 0);
   const totalClaimed = data.claims.completed_this_month;
 
-  return `WEEKLY OPERATIONS REPORT (${data.week.start} to ${data.week.end})
+  return `Here is a comprehensive overview of our operations for the current week. 
+
+WEEKLY OPERATIONS REPORT (${data.week.start} to ${data.week.end})
 
 MORTUARY STATUS:
 • Total Deceased: ${totalDeceased} across ${data.facilities.length} facilities
@@ -286,7 +298,9 @@ ACTION ITEMS:
 };
 
 const generatePlanPerformance = (data) => {
-  return `PLAN PERFORMANCE ANALYSIS
+  return `I have analyzed our plan performance for this month. The premium tiers continue to drive our strongest margins. Here is the breakdown:
+
+PLAN PERFORMANCE ANALYSIS
 
 REVENUE BREAKDOWN (This Month):
 ${Object.entries(data.plans).map(([name, plan]) => 
@@ -315,7 +329,9 @@ Budget tier = 10 cases, 85% satisfaction
 };
 
 const generateRevenueOpportunity = (data) => {
-  return `REVENUE OPPORTUNITY ANALYSIS
+  return `Based on our current add-on utilization, there is a significant opportunity to increase revenue through strategic upselling. 
+
+REVENUE OPPORTUNITY ANALYSIS
 
 CURRENT ADD-ON PERFORMANCE:
 
@@ -347,7 +363,9 @@ ACTION PLAN:
 };
 
 const generateStaffUtilization = (data) => {
-  return `STAFF UTILIZATION & CAPACITY ANALYSIS
+  return `Our team is currently operating efficiently, but we are approaching our peak capacity thresholds. Here is the staff utilization report:
+
+STAFF UTILIZATION & CAPACITY ANALYSIS
 
 CURRENT STATUS:
 • Team Size: ${data.staff.total_team}
@@ -381,7 +399,9 @@ RECOMMENDATION:
 };
 
 const generateOnTimeDelivery = (data) => {
-  return `ON-TIME DELIVERY & COMPLETION ANALYSIS
+  return `I've analyzed our delivery pipeline. We are currently meeting our targets, but there are a few bottlenecks in scheduling that require attention.
+
+ON-TIME DELIVERY & COMPLETION ANALYSIS
 
 CURRENT PERFORMANCE:
 • On-Time Completion Rate: ${data.claims.on_time_completion}%
@@ -415,7 +435,9 @@ RECOMMENDATIONS:
 };
 
 const generateCustomerSatisfaction = (data) => {
-  return `CUSTOMER SATISFACTION ANALYSIS
+  return `Customer satisfaction remains an industry-leading strength for us. Our NPS score is very healthy, particularly in the premium tiers. 
+
+CUSTOMER SATISFACTION ANALYSIS
 
 OVERALL RATING: ${data.satisfaction.overall_rating}/10
 NPS Score: ${data.satisfaction.nps_score} (Strong - Industry leading)
@@ -451,7 +473,9 @@ ACTION PLAN:
 };
 
 const generateDemandForecast = (data) => {
-  return `30-DAY DEMAND FORECAST
+  return `Looking ahead at the next 30 days, we anticipate a significant surge in Week 3 that will push our operational capacity. 
+
+30-DAY DEMAND FORECAST
 
 CASE PROJECTIONS:
 • Week 1 (Aug 11-17): ${data.forecast.week_1.expected_cases} cases - ${data.forecast.week_1.utilization} capacity utilization
@@ -488,7 +512,9 @@ STRATEGIC RECOMMENDATIONS:
 };
 
 const generateStrategicRecommendations = (data) => {
-  return `STRATEGIC RECOMMENDATIONS
+  return `Based on our operational data, financial metrics, and demand forecasting, here is my strategic roadmap for the company:
+
+STRATEGIC RECOMMENDATIONS
 
 IMMEDIATE (This Week):
 1. Resolve inventory shortage → Arrange tent repairs/rentals
@@ -527,179 +553,37 @@ KEY METRICS TO MONITOR:
 5. Monthly revenue (Target: R1,000,000+)`;
 };
 
-const baseStyles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '80vh',
-    minHeight: '600px',
-    backgroundColor: '#0b1121', 
-    color: '#ffffff',
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    padding: '16px',
-    borderRadius: '16px',
-    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-    margin: '2rem auto',
-    maxWidth: '900px'
-  },
-  card: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-    backgroundColor: '#111827', 
-    borderRadius: '16px',
-    border: '1px solid #1f2937',
-    overflow: 'hidden'
-  },
-  header: {
-    padding: '24px 32px',
-    borderBottom: '1px solid #1f2937',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px'
-  },
-  title: {
-    margin: 0,
-    fontSize: '20px',
-    fontWeight: '600',
-    color: '#e2e8f0',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  },
-  subtitle: {
-    margin: '4px 0 0 0',
-    fontSize: '14px',
-    color: '#94a3b8'
-  },
-  messagesContainer: {
-    flex: 1,
-    overflowY: 'auto',
-    padding: '32px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-    backgroundColor: '#111827'
-  },
-  inputSection: {
-    padding: '24px 32px',
-    backgroundColor: '#111827',
-    borderTop: '1px solid #1f2937'
-  },
-  inputForm: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    backgroundColor: '#0b1121',
-    border: '1px solid #1f2937',
-    borderRadius: '12px',
-    padding: '8px 8px 8px 16px',
-    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
-  },
-  textInput: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#e2e8f0',
-    fontSize: '15px',
-    fontFamily: 'inherit',
-    resize: 'none',
-    maxHeight: '120px',
-    outline: 'none',
-    padding: '8px 0'
-  },
-  submitButton: {
-    padding: '12px 16px',
-    backgroundColor: '#2563eb',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  suggestionsContainer: {
-    marginTop: '20px'
-  },
-  suggestionsTitle: {
-    fontSize: '14px',
-    color: '#94a3b8',
-    marginBottom: '12px'
-  },
-  chipsRow: {
-    display: 'flex',
-    gap: '12px',
-    flexWrap: 'wrap'
-  },
-  chip: {
-    padding: '10px 16px',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid #1f2937',
-    borderRadius: '24px',
-    color: '#94a3b8',
-    fontSize: '13px',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    whiteSpace: 'nowrap'
-  },
-  spinner: {
-    width: '18px',
-    height: '18px',
-    border: '2px solid rgba(255,255,255,0.3)',
-    borderRadius: '50%',
-    borderTopColor: '#fff',
-    animation: 'spin 1s ease-in-out infinite'
-  },
-  loaderBubble: {
-    display: 'flex',
-    gap: '6px',
-    padding: '16px 20px',
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderRadius: '16px',
-    borderBottomLeftRadius: '4px',
-    border: '1px solid #1f2937',
-    width: 'fit-content'
-  },
-  loaderDot: {
-    width: '8px',
-    height: '8px',
-    backgroundColor: '#3b82f6',
-    borderRadius: '50%',
-    animation: 'bounce 1.4s infinite ease-in-out both'
-  }
-};
-
 const getBubbleStyle = (type) => {
   const base = {
-    padding: '14px 20px',
-    borderRadius: '16px',
+    padding: '16px 22px',
+    borderRadius: '20px',
     fontSize: '15px',
     lineHeight: '1.6',
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    animation: 'slideUpFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
   };
 
   if (type === 'user') {
     return { 
       ...base, 
-      backgroundColor: '#2563eb', 
+      backgroundColor: 'rgba(37, 99, 235, 0.9)', 
       color: '#ffffff', 
-      borderBottomRightRadius: '4px',
-      boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
+      borderBottomRightRadius: '6px',
       whiteSpace: 'pre-wrap',
       wordBreak: 'break-word',
-      display: 'inline-block'
+      display: 'inline-block',
+      border: '1px solid rgba(59, 130, 246, 0.5)'
     };
   } else if (type === 'assistant') {
     return { 
       ...base, 
-      backgroundColor: '#1e293b', 
+      backgroundColor: 'rgba(15, 23, 42, 0.75)', 
       color: '#e2e8f0', 
-      borderBottomLeftRadius: '4px',
-      border: '1px solid #334155',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      borderBottomLeftRadius: '6px',
+      border: '1px solid rgba(51, 65, 85, 0.8)',
       width: '100%'
     };
   }
@@ -710,7 +594,7 @@ const formatMessageText = (text) => {
   if (!text) return null;
   return text.split('\n').map((line, index) => {
     const trimmed = line.trim();
-    if (!trimmed) return <div key={index} style={{ height: '8px' }} />;
+    if (!trimmed) return <div key={index} style={{ height: '12px' }} />;
 
     // Main Headers (All caps ending in colon, or short all caps words)
     if (/^[A-Z\s&]+:$/.test(trimmed) || (trimmed.toUpperCase() === trimmed && trimmed.length > 5 && !trimmed.includes(' ') && !trimmed.includes('•'))) {
@@ -719,12 +603,13 @@ const formatMessageText = (text) => {
           color: '#38bdf8', 
           fontWeight: '700', 
           fontSize: '13px', 
-          letterSpacing: '1px', 
-          marginTop: index === 0 ? '4px' : '24px', 
-          marginBottom: '12px', 
-          borderBottom: '1px solid rgba(56, 189, 248, 0.15)', 
+          letterSpacing: '1.2px', 
+          marginTop: index === 0 ? '4px' : '28px', 
+          marginBottom: '14px', 
+          borderBottom: '1px solid rgba(56, 189, 248, 0.2)', 
           paddingBottom: '8px',
-          textTransform: 'uppercase'
+          textTransform: 'uppercase',
+          textShadow: '0 0 10px rgba(56, 189, 248, 0.3)'
         }}>
           {trimmed.replace(':', '')}
         </div>
@@ -740,8 +625,22 @@ const formatMessageText = (text) => {
          innerContent = <><strong style={{ color: '#f8fafc', fontWeight: '600' }}>{parts[0]}:</strong>{parts.slice(1).join(':')}</>;
       }
       return (
-        <div key={index} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px' }}>
-          <span style={{ color: '#38bdf8', marginRight: '10px', fontSize: '14px', marginTop: '2px' }}>▪</span>
+        <div key={index} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '10px' }}>
+          <div style={{ 
+            color: '#38bdf8', 
+            marginRight: '12px', 
+            fontSize: '10px', 
+            marginTop: '6px',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            padding: '4px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 0 8px rgba(56, 189, 248, 0.4)'
+          }}>
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+          </div>
           <span style={{ color: '#cbd5e1', flex: 1, lineHeight: '1.6' }}>{innerContent}</span>
         </div>
       );
@@ -751,7 +650,7 @@ const formatMessageText = (text) => {
     if (trimmed.includes(':')) {
       const parts = trimmed.split(':');
       return (
-        <div key={index} style={{ marginBottom: '6px', lineHeight: '1.6', color: '#cbd5e1' }}>
+        <div key={index} style={{ marginBottom: '8px', lineHeight: '1.6', color: '#cbd5e1' }}>
           <strong style={{ color: '#f8fafc', fontWeight: '600' }}>{parts[0]}:</strong>
           <span style={{ color: '#cbd5e1' }}>{parts.slice(1).join(':')}</span>
         </div>
@@ -760,7 +659,7 @@ const formatMessageText = (text) => {
 
     // Regular text
     return (
-      <div key={index} style={{ marginBottom: '8px', color: '#cbd5e1', lineHeight: '1.6' }}>
+      <div key={index} style={{ marginBottom: '12px', color: '#cbd5e1', lineHeight: '1.6' }}>
         {trimmed}
       </div>
     );
@@ -772,7 +671,7 @@ export default function FuneralOpsDemo() {
     {
       id: 1,
       type: 'assistant',
-      text: "Hello! I'm your Funeral Services AI Assistant. Welcome to Dondas Technologies.\n\nI can help you with:\n\nOPERATIONAL:\n• Mortuary occupancy & inventory\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nTry asking me anything!",
+      text: "Hello! I'm your Dondas Technologies Funeral AI Assistant.\n\nI am equipped to analyze and report on operations, logistics, and business intelligence. I can help you with:\n\nOPERATIONS:\n• Mortuary occupancy & inventory\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nTry asking me anything!",
       timestamp: new Date()
     }
   ]);
@@ -857,35 +756,35 @@ export default function FuneralOpsDemo() {
           setIsAuthenticated(true);
           setAuthMode('vanessa');
           setDemoData(data);
-          responseText = `Welcome Vanessa! This is Dondas Tech AI Manager\n\nFor Funeral Service Operations\n\nYou can ask me about:\n\nOPERATIONS:\n• Mortuary occupancy & deceased tracking\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nThis is a test environment with generic data.\n\nWhat would you like to explore?`;
+          responseText = `Welcome Vanessa! I am the Dondas Technologies AI Manager, configured specifically for Funeral Service Operations.\n\nI am currently running in a test environment with generic sanitized data to protect client confidentiality.\n\nYou can ask me about:\n\nOPERATIONS:\n• Mortuary occupancy & deceased tracking\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nWhat would you like to explore?`;
         } else if (authKeywords.some(k => lowerQ.includes(k))) {
           setIsAuthenticated(true);
           setAuthMode('demo');
           setDemoData(data);
-          responseText = `Welcome to Dondas Technologies AI Demo!\n\nI've loaded comprehensive funeral service operational data.\n\nYou can now ask me about:\n\nOPERATIONS: Mortuary status, inventory, arrangements, weekend planning, fleet\nBUSINESS: Plans, revenue, staff, satisfaction, forecasts, recommendations\n\nWhat would you like to know?`;
+          responseText = `Welcome to the Dondas Technologies AI Demo!\n\nI have successfully loaded the comprehensive operational dataset for this presentation.\n\nYou can now ask me advanced queries about:\n\nOPERATIONS: Mortuary status, inventory, arrangements, weekend planning, fleet\nBUSINESS: Plans, revenue, staff, satisfaction, forecasts, recommendations\n\nWhat metrics or insights would you like to dive into?`;
         } else {
-          responseText = `Hello! Type "start demo" or "show me" to begin exploring funeral service operations with AI-powered insights.\n\n(Or type "vanessa" for test mode)`;
+          responseText = `Hello! Please type "start demo" or "show me" to begin exploring funeral service operations with AI-powered insights.\n\n(Or type "vanessa" for the sanitized test mode)`;
         }
       } else {
         // OPERATIONAL QUERIES
         if (fuzzyMatch(lowerQ, ['mortuary', 'occupancy', 'deceased', 'facilities', 'status'])) {
-          responseText = `MORTUARY OCCUPANCY STATUS\n\n${data.facilities.map(f => `${f.name}:\n  • Total Deceased: ${f.deceased}\n  • Claimed: ${f.claimed}\n  • Unclaimed: ${f.unclaimed}\n  • Capacity Used: ${f.capacity_used}`).join('\n\n')}\n\nOVERALL:\n• Total Deceased: ${data.facilities.reduce((sum, f) => sum + f.deceased, 0)}\n• Total Claimed: ${data.facilities.reduce((sum, f) => sum + f.claimed, 0)}\n• Total Unclaimed: ${data.facilities.reduce((sum, f) => sum + f.unclaimed, 0)}\n• Family Response Rate: ${Math.round((data.facilities.reduce((sum, f) => sum + f.claimed, 0) / data.facilities.reduce((sum, f) => sum + f.deceased, 0)) * 100)}%`;
+          responseText = `I've checked the latest data across all our facilities. Here is the current mortuary occupancy status:\n\nMORTUARY OCCUPANCY STATUS\n\n${data.facilities.map(f => `${f.name}:\n  • Total Deceased: ${f.deceased}\n  • Claimed: ${f.claimed}\n  • Unclaimed: ${f.unclaimed}\n  • Capacity Used: ${f.capacity_used}`).join('\n\n')}\n\nOVERALL:\n• Total Deceased: ${data.facilities.reduce((sum, f) => sum + f.deceased, 0)}\n• Total Claimed: ${data.facilities.reduce((sum, f) => sum + f.claimed, 0)}\n• Total Unclaimed: ${data.facilities.reduce((sum, f) => sum + f.unclaimed, 0)}\n• Family Response Rate: ${Math.round((data.facilities.reduce((sum, f) => sum + f.claimed, 0) / data.facilities.reduce((sum, f) => sum + f.deceased, 0)) * 100)}%`;
         }
         // NEW: Which funeral service?
-        else if (fuzzyMatch(lowerQ, ['which', 'funeral', 'service', 'company', 'organization', 'name', 'who'])) {
-          responseText = `FUNERAL SERVICE INFORMATION\n\nCompany: THLOLO VICTORY FUNERAL SERVICES\n\nLOCATIONS:\n• Primary Mortuary (Qwaqwa Branch)\n• Secondary Mortuary (Bethlehem Branch)\n• Tertiary Facility (Reitz Branch)\n\nOPERATIONAL STAFF:\n• Management: Director + Branch Managers\n• Operations: 8 core team members\n• Fleet: 5 drivers (Sibusiso, Kagiso, Tebogo, Mandla, Thabo)\n\nFOCUS AREAS:\n• Multiple plan tiers (Supreme to Basic)\n• Premium services (Catering, Flowers, Decorations)\n• Full logistics coordination\n• Customer satisfaction focus (9.2/10)\n\nThis is Thlolo Victory Funeral Services - serving communities across Free State Province.`;
+        else if (fuzzyMatch(lowerQ, ['which', 'funeral', 'service', 'company', 'organization', 'name', 'who', 'branches'])) {
+          responseText = `You are viewing the operational profile for Thlolo Victory Funeral Services.\n\nFUNERAL SERVICE INFORMATION\n\nCompany: THLOLO VICTORY FUNERAL SERVICES\n\nLOCATIONS:\n• Primary Mortuary (Qwaqwa Branch)\n• Secondary Mortuary (Bethlehem Branch)\n• Tertiary Facility (Reitz Branch)\n\nOPERATIONAL STAFF:\n• Management: Director + Branch Managers\n• Operations: 8 core team members\n• Fleet: 5 drivers (Sibusiso, Kagiso, Tebogo, Mandla, Thabo)\n\nFOCUS AREAS:\n• Multiple plan tiers (Supreme to Basic)\n• Premium services (Catering, Flowers, Decorations)\n• Full logistics coordination\n• Customer satisfaction focus (9.2/10)\n\nThis system manages their entire logistics and operations footprint across the Free State Province.`;
         }
-        else if (fuzzyMatch(lowerQ, ['weekend', 'saturday', 'sunday', 'services', 'schedule', 'capacity'])) {
-          responseText = `WEEKEND SERVICES FORECAST\n\nSCHEDULED SERVICES: ${data.weekend.services_scheduled}\n• Expected Revenue: ${data.weekend.expected_revenue}\n• Staff Allocated: ${data.weekend.staff_allocated}/${data.weekend.staff_available}\n\nCAPACITY ANALYSIS:\n• Tents: ${data.weekend.tents_available}/${data.weekend.tents_needed} available (${Math.round((data.weekend.tents_available/data.weekend.tents_needed)*100)}%) ${data.weekend.shortage_alert ? 'SHORTAGE!' : 'OK'}\n\n${data.weekend.shortage_alert ? `ALERT: ${data.weekend.shortage_details}\nRECOMMENDATION: Arrange emergency rentals immediately. This is critical for weekend success.` : 'All systems go for the weekend!'}`;
+        else if (fuzzyMatch(lowerQ, ['weekend', 'saturday', 'sunday', 'week look', 'week look like', 'services', 'schedule', 'capacity'])) {
+          responseText = `I've analyzed our upcoming schedule. The weekend is looking busy but manageable, with one critical alert to note.\n\nWEEKEND SERVICES FORECAST\n\nSCHEDULED SERVICES: ${data.weekend.services_scheduled}\n• Expected Revenue: ${data.weekend.expected_revenue}\n• Staff Allocated: ${data.weekend.staff_allocated}/${data.weekend.staff_available}\n\nCAPACITY ANALYSIS:\n• Tents: ${data.weekend.tents_available}/${data.weekend.tents_needed} available (${Math.round((data.weekend.tents_available/data.weekend.tents_needed)*100)}%) ${data.weekend.shortage_alert ? 'SHORTAGE!' : 'OK'}\n\n${data.weekend.shortage_alert ? `ALERT: ${data.weekend.shortage_details}\nRECOMMENDATION: Arrange emergency rentals immediately. This is critical for weekend success.` : 'All systems go for the weekend!'}`;
         }
         else if (fuzzyMatch(lowerQ, ['claim', 'arrangement', 'arrangements', 'scheduling', 'pending'])) {
-          responseText = `CLAIM & ARRANGEMENT STATUS\n\nTOTAL CASES: ${data.claims.total_cases}\n• Completed: ${data.claims.completed_this_month}\n• On-Time: ${data.claims.on_time_completion}%\n• Overdue: ${data.claims.overdue_count}\n\nSTAGE BREAKDOWN:\n• Cleansing Scheduled: ${data.claims.cleansing_scheduled}/${data.claims.total_cases}\n• Delivery Pending: ${data.claims.delivery_pending} cases\n• Service Pending: ${data.claims.service_pending} cases\n\nAVERAGE COMPLETION TIME: ${data.claims.avg_days_to_completion} days\n\nACTION: Contact ${data.claims.overdue_count} families for delivery/service confirmations`;
+          responseText = `Here is the current pipeline for claims and arrangements. We're maintaining an 87% on-time delivery rate.\n\nCLAIM & ARRANGEMENT STATUS\n\nTOTAL CASES: ${data.claims.total_cases}\n• Completed: ${data.claims.completed_this_month}\n• On-Time: ${data.claims.on_time_completion}%\n• Overdue: ${data.claims.overdue_count}\n\nSTAGE BREAKDOWN:\n• Cleansing Scheduled: ${data.claims.cleansing_scheduled}/${data.claims.total_cases}\n• Delivery Pending: ${data.claims.delivery_pending} cases\n• Service Pending: ${data.claims.service_pending} cases\n\nAVERAGE COMPLETION TIME: ${data.claims.avg_days_to_completion} days\n\nACTION: Contact ${data.claims.overdue_count} families for delivery/service confirmations`;
         }
         else if (fuzzyMatch(lowerQ, ['stock', 'inventory', 'supplies', 'fridge', 'casket', 'tent', 'chair', 'table', 'supplies'])) {
-          responseText = `INVENTORY & STOCK STATUS\n\nADEQUATE ITEMS:\n${data.stock.adequate_items.map(item => `  • ${item}`).join('\n')}\n\nLOW STOCK ITEMS:\n${data.stock.low_items.map(item => `  • ${item}`).join('\n')}\n\nREQUIRES REORDERING:\n${data.stock.reorder_needed.map(item => `  • ${item}`).join('\n')}\n\nLast Restocked: ${data.stock.last_restocked}\n\nRECOMMENDATION: Priority - resolve tent shortage before weekend. Long-term: expand inventory by 3 home tents.`;
+          responseText = `I've scanned the inventory system. Most items are adequate, but we need to reorder tents immediately.\n\nINVENTORY & STOCK STATUS\n\nADEQUATE ITEMS:\n${data.stock.adequate_items.map(item => `  • ${item}`).join('\n')}\n\nLOW STOCK ITEMS:\n${data.stock.low_items.map(item => `  • ${item}`).join('\n')}\n\nREQUIRES REORDERING:\n${data.stock.reorder_needed.map(item => `  • ${item}`).join('\n')}\n\nLast Restocked: ${data.stock.last_restocked}\n\nRECOMMENDATION: Priority - resolve tent shortage before weekend. Long-term: expand inventory by 3 home tents.`;
         }
         else if (fuzzyMatch(lowerQ, ['fleet', 'vehicles', 'cars', 'hearses', 'drivers', 'logistics', 'transport', 'registration', 'reg', 'plate'])) {
-          responseText = `FLEET STATUS & ALLOCATION\n\nWEEKEND REQUIREMENTS (${data.weekend.services_scheduled} services):\n• Hearses: ${data.fleet.hearses_needed} needed | ${data.fleet.hearses_available} available\n• Family Cars: ${data.fleet.family_cars_needed} needed | ${data.fleet.family_cars_available} available\n\nDETAILED VEHICLE REGISTRY:\n\nHEARSES:\n  1. ${data.fleet.vehicles[0].name}\n     • Registration: ${data.fleet.vehicles[0].reg}\n     • Driver: ${data.fleet.vehicles[0].driver}\n     • Status: ${data.fleet.vehicles[0].status}\n     • Mileage: ${data.fleet.vehicles[0].mileage}\n     • Last Service: ${data.fleet.vehicles[0].last_service}\n     • Next Service: ${data.fleet.vehicles[0].next_service}\n\n  2. ${data.fleet.vehicles[1].name}\n     • Registration: ${data.fleet.vehicles[1].reg}\n     • Driver: ${data.fleet.vehicles[1].driver}\n     • Status: ${data.fleet.vehicles[1].status}\n     • Mileage: ${data.fleet.vehicles[1].mileage}\n     • Last Service: ${data.fleet.vehicles[1].last_service}\n     • Next Service: ${data.fleet.vehicles[1].next_service}\n\nFAMILY CARS:\n  1. ${data.fleet.vehicles[2].name}\n     • Registration: ${data.fleet.vehicles[2].reg}\n     • Driver: ${data.fleet.vehicles[2].driver}\n     • Status: ${data.fleet.vehicles[2].status}\n     • Mileage: ${data.fleet.vehicles[2].mileage}\n     • Last Service: ${data.fleet.vehicles[2].last_service}\n     • Next Service: ${data.fleet.vehicles[2].next_service}\n\n  2. ${data.fleet.vehicles[3].name}\n     • Registration: ${data.fleet.vehicles[3].reg}\n     • Driver: ${data.fleet.vehicles[3].driver}\n     • Status: ${data.fleet.vehicles[3].status}\n     • Mileage: ${data.fleet.vehicles[3].mileage}\n     • Last Service: ${data.fleet.vehicles[3].last_service}\n     • Next Service: ${data.fleet.vehicles[3].next_service}\n\n  3. ${data.fleet.vehicles[4].name}\n     • Registration: ${data.fleet.vehicles[4].reg}\n     • Driver: ${data.fleet.vehicles[4].driver}\n     • Status: ${data.fleet.vehicles[4].status}\n     • Mileage: ${data.fleet.vehicles[4].mileage}\n     • Last Service: ${data.fleet.vehicles[4].last_service}\n     • Next Service: ${data.fleet.vehicles[4].next_service}\n\nUTILIZATION: ${data.fleet.utilization}\n\nSTATUS: Fully resourced for weekend operations\nALL VEHICLES: Current on maintenance\nALL DRIVERS: On duty and ready`;
+          responseText = `Here is the comprehensive fleet registry, including vehicle plates, maintenance schedules, and assigned drivers.\n\nFLEET STATUS & ALLOCATION\n\nWEEKEND REQUIREMENTS (${data.weekend.services_scheduled} services):\n• Hearses: ${data.fleet.hearses_needed} needed | ${data.fleet.hearses_available} available\n• Family Cars: ${data.fleet.family_cars_needed} needed | ${data.fleet.family_cars_available} available\n\nDETAILED VEHICLE REGISTRY:\n\nHEARSES:\n  1. ${data.fleet.vehicles[0].name}\n     • Registration: ${data.fleet.vehicles[0].reg}\n     • Driver: ${data.fleet.vehicles[0].driver}\n     • Status: ${data.fleet.vehicles[0].status}\n     • Mileage: ${data.fleet.vehicles[0].mileage}\n     • Last Service: ${data.fleet.vehicles[0].last_service}\n     • Next Service: ${data.fleet.vehicles[0].next_service}\n\n  2. ${data.fleet.vehicles[1].name}\n     • Registration: ${data.fleet.vehicles[1].reg}\n     • Driver: ${data.fleet.vehicles[1].driver}\n     • Status: ${data.fleet.vehicles[1].status}\n     • Mileage: ${data.fleet.vehicles[1].mileage}\n     • Last Service: ${data.fleet.vehicles[1].last_service}\n     • Next Service: ${data.fleet.vehicles[1].next_service}\n\nFAMILY CARS:\n  1. ${data.fleet.vehicles[2].name}\n     • Registration: ${data.fleet.vehicles[2].reg}\n     • Driver: ${data.fleet.vehicles[2].driver}\n     • Status: ${data.fleet.vehicles[2].status}\n     • Mileage: ${data.fleet.vehicles[2].mileage}\n     • Last Service: ${data.fleet.vehicles[2].last_service}\n     • Next Service: ${data.fleet.vehicles[2].next_service}\n\n  2. ${data.fleet.vehicles[3].name}\n     • Registration: ${data.fleet.vehicles[3].reg}\n     • Driver: ${data.fleet.vehicles[3].driver}\n     • Status: ${data.fleet.vehicles[3].status}\n     • Mileage: ${data.fleet.vehicles[3].mileage}\n     • Last Service: ${data.fleet.vehicles[3].last_service}\n     • Next Service: ${data.fleet.vehicles[3].next_service}\n\n  3. ${data.fleet.vehicles[4].name}\n     • Registration: ${data.fleet.vehicles[4].reg}\n     • Driver: ${data.fleet.vehicles[4].driver}\n     • Status: ${data.fleet.vehicles[4].status}\n     • Mileage: ${data.fleet.vehicles[4].mileage}\n     • Last Service: ${data.fleet.vehicles[4].last_service}\n     • Next Service: ${data.fleet.vehicles[4].next_service}\n\nUTILIZATION: ${data.fleet.utilization}\n\nSTATUS: Fully resourced for weekend operations\nALL VEHICLES: Current on maintenance\nALL DRIVERS: On duty and ready`;
         }
 
         // BUSINESS INTELLIGENCE QUERIES
@@ -907,14 +806,14 @@ export default function FuneralOpsDemo() {
         else if (fuzzyMatch(lowerQ, ['forecast', 'demand', 'projection', 'ahead', 'upcoming', 'peak', 'busy'])) {
           responseText = generateDemandForecast(data);
         }
-        else if (fuzzyMatch(lowerQ, ['recommendation', 'recommend', 'suggest', 'strategy', 'strategic', 'action', 'priority', 'focus'])) {
+        else if (fuzzyMatch(lowerQ, ['recommendation', 'recommend', 'suggest', 'strategy', 'strategic', 'action', 'priority', 'focus', 'summary'])) {
           responseText = generateStrategicRecommendations(data);
         }
-        else if (fuzzyMatch(lowerQ, ['report', 'weekly', 'summary', 'overview', 'complete', 'full'])) {
+        else if (fuzzyMatch(lowerQ, ['report', 'weekly', 'overview', 'complete', 'full'])) {
           responseText = generateWeeklyReport(data);
         }
         else {
-          responseText = `I understand you're asking: "${currentQ}"\n\nI can provide insights on:\n\nOPERATIONS:\n• Mortuary occupancy & facilities\n• Funeral arrangements & scheduling  \n• Inventory & stock levels\n• Weekend capacity planning\n• Fleet availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance & revenue\n• Revenue opportunities & add-ons\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction\n• Demand forecasting\n• Strategic recommendations\n\nPlease rephrase your question or choose one of these topics.`;
+          responseText = `I didn't quite catch that. You asked: "${currentQ}"\n\nI can provide deep insights on the following topics:\n\nOPERATIONS:\n• Mortuary occupancy & facilities\n• Funeral arrangements & scheduling  \n• Inventory & stock levels\n• Weekend capacity planning\n• Fleet availability\n\nBUSINESS INTELLIGENCE:\n• Plan performance & revenue\n• Revenue opportunities & add-ons\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction\n• Demand forecasting\n• Strategic recommendations\n\nPlease rephrase your question or select one of the core topics above.`;
         }
       }
 
@@ -949,152 +848,287 @@ export default function FuneralOpsDemo() {
         <meta name="description" content="Smart AI Assistant combining operational management with business intelligence for funeral services." />
       </Helmet>
       
-      <div style={{ paddingTop: '8rem', paddingBottom: '2rem', background: 'linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg))', textAlign: 'center' }}>
-        <div className="container">
-          <h1>Dondas Technologies</h1>
-          <p className="text-muted" style={{ fontSize: '1.25rem' }}>
+      <div style={{ 
+        paddingTop: '8rem', 
+        paddingBottom: '2rem', 
+        background: 'linear-gradient(135deg, #0b1121 0%, #172554 100%)', 
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Abstract glowing background elements for premium feel */}
+        <div style={{ position: 'absolute', top: '-20%', left: '10%', width: '300px', height: '300px', background: 'rgba(56, 189, 248, 0.1)', borderRadius: '50%', filter: 'blur(80px)' }}></div>
+        <div style={{ position: 'absolute', bottom: '-20%', right: '10%', width: '400px', height: '400px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%', filter: 'blur(100px)' }}></div>
+        
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <h1 style={{ color: '#f8fafc', textShadow: '0 2px 10px rgba(0,0,0,0.3)', letterSpacing: '-0.5px' }}>Dondas Technologies</h1>
+          <p className="text-muted" style={{ fontSize: '1.25rem', color: '#94a3b8' }}>
             AI-Powered Funeral Services Intelligence Platform
           </p>
-          {isAuthenticated && <p style={{ color: '#10b981', fontWeight: 'bold' }}>Demo Mode Active</p>}
+          {isAuthenticated && <p style={{ color: '#10b981', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981', boxShadow: '0 0 8px #10b981' }}></span>
+            Demo Mode Active
+          </p>}
         </div>
       </div>
 
-      <Section>
-        <div style={baseStyles.container}>
-          <style>{`
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-            @keyframes bounce {
-              0%, 80%, 100% { transform: scale(0); }
-              40% { transform: scale(1); }
-            }
-            .suggestion-chip:hover {
-              background-color: rgba(255,255,255,0.08) !important;
-              color: #e2e8f0 !important;
-            }
-            textarea::placeholder {
-              color: #64748b;
-            }
-            ::-webkit-scrollbar {
-              width: 8px;
-            }
-            ::-webkit-scrollbar-track {
-              background: #0b1121; 
-            }
-            ::-webkit-scrollbar-thumb {
-              background: #1f2937; 
-              border-radius: 4px;
-            }
-            ::-webkit-scrollbar-thumb:hover {
-              background: #374151; 
-            }
-          `}</style>
+      <div style={{ background: 'linear-gradient(to bottom, #172554, #0b1121)', minHeight: '100vh', paddingBottom: '4rem' }}>
+        <Section>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '80vh',
+            minHeight: '700px',
+            backgroundColor: 'rgba(15, 23, 42, 0.6)', // Glassmorphism base
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            color: '#ffffff',
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            padding: '20px',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05) inset',
+            margin: '0 auto',
+            maxWidth: '1000px',
+            position: 'relative',
+            zIndex: 10
+          }}>
+            <style>{`
+              @keyframes spin {
+                to { transform: rotate(360deg); }
+              }
+              @keyframes bounce {
+                0%, 80%, 100% { transform: scale(0); }
+                40% { transform: scale(1); }
+              }
+              @keyframes slideUpFadeIn {
+                from { opacity: 0; transform: translateY(20px) scale(0.98); }
+                to { opacity: 1; transform: translateY(0) scale(1); }
+              }
+              .suggestion-chip:hover {
+                background-color: rgba(56, 189, 248, 0.15) !important;
+                border-color: rgba(56, 189, 248, 0.4) !important;
+                color: #f8fafc !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+              }
+              textarea::placeholder {
+                color: #64748b;
+              }
+              ::-webkit-scrollbar {
+                width: 6px;
+              }
+              ::-webkit-scrollbar-track {
+                background: transparent; 
+              }
+              ::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.1); 
+                border-radius: 10px;
+              }
+              ::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.2); 
+              }
+            `}</style>
 
-          <div style={baseStyles.card}>
-            <div style={baseStyles.header}>
-              <div>
-                <img src={aiAvatar} alt="AI Avatar" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 15px rgba(59, 130, 246, 0.6)' }} />
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              backgroundColor: 'rgba(15, 23, 42, 0.4)', 
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              overflow: 'hidden',
+              boxShadow: 'inset 0 0 20px rgba(0,0,0,0.2)'
+            }}>
+              <div style={{
+                padding: '24px 32px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                background: 'linear-gradient(to right, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))'
+              }}>
+                <div style={{ position: 'relative' }}>
+                  <img src={aiAvatar} alt="AI Avatar" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 20px rgba(56, 189, 248, 0.5)', border: '2px solid rgba(56, 189, 248, 0.8)' }} />
+                  <div style={{ position: 'absolute', bottom: '0', right: '0', width: '12px', height: '12px', backgroundColor: '#10b981', borderRadius: '50%', border: '2px solid #1e293b' }}></div>
+                </div>
+                <div>
+                  <h2 style={{
+                    margin: 0,
+                    fontSize: '22px',
+                    fontWeight: '700',
+                    color: '#f8fafc',
+                    letterSpacing: '-0.5px'
+                  }}>Funeral Services Intelligence AI</h2>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {!isAuthenticated && 'System Ready - Awaiting Initialization'}
+                    {isAuthenticated && authMode === 'vanessa' && <><span style={{ color: '#f59e0b' }}>🔐 Sanitized Test Environment</span></>}
+                    {isAuthenticated && authMode === 'demo' && <><span style={{ color: '#10b981' }}>✅ Enterprise Data Loaded</span></>}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 style={baseStyles.title}>Funeral Services Intelligence AI</h2>
-                <p style={baseStyles.subtitle}>
-                  {!isAuthenticated && 'Ready to demo'}
-                  {isAuthenticated && authMode === 'vanessa' && 'Vanessa Test Mode (Sanitized)'}
-                  {isAuthenticated && authMode === 'demo' && 'Demo Mode Active'}
-                </p>
-              </div>
-            </div>
 
-            <div style={baseStyles.messagesContainer}>
-              {messages.map((msg) => (
-                <div key={msg.id} style={{ 
-                  display: 'flex', 
-                  justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start', 
-                  width: '100%',
-                  marginBottom: '12px'
-                }}>
-                  <div style={{ 
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '32px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '24px',
+              }}>
+                {messages.map((msg) => (
+                  <div key={msg.id} style={{ 
                     display: 'flex', 
-                    gap: '16px', 
-                    alignItems: 'flex-end', 
-                    maxWidth: msg.type === 'assistant' ? '85%' : '75%', 
-                    flexDirection: msg.type === 'user' ? 'row-reverse' : 'row' 
+                    justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start', 
+                    width: '100%',
+                    marginBottom: '12px'
                   }}>
-                    {msg.type === 'assistant' && (
-                      <img src={aiAvatar} alt="AI" style={{ width: '32px', height: '32px', borderRadius: '50%', marginBottom: '4px', objectFit: 'cover', boxShadow: '0 0 12px rgba(59, 130, 246, 0.4)', flexShrink: 0 }} />
-                    )}
-                    <div style={getBubbleStyle(msg.type)}>
-                      {msg.type === 'assistant' ? formatMessageText(msg.text) : msg.text}
+                    <div style={{ 
+                      display: 'flex', 
+                      gap: '16px', 
+                      alignItems: 'flex-end', 
+                      maxWidth: msg.type === 'assistant' ? '85%' : '75%', 
+                      flexDirection: msg.type === 'user' ? 'row-reverse' : 'row' 
+                    }}>
+                      {msg.type === 'assistant' && (
+                        <img src={aiAvatar} alt="AI" style={{ width: '32px', height: '32px', borderRadius: '50%', marginBottom: '4px', objectFit: 'cover', boxShadow: '0 0 12px rgba(56, 189, 248, 0.4)', flexShrink: 0, border: '1px solid rgba(56, 189, 248, 0.5)' }} />
+                      )}
+                      <div style={getBubbleStyle(msg.type)}>
+                        {msg.type === 'assistant' ? formatMessageText(msg.text) : msg.text}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {loading && (
-                <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}>
-                  <div style={baseStyles.loaderBubble}>
-                    <div style={{...baseStyles.loaderDot, animationDelay: '-0.32s'}} />
-                    <div style={{...baseStyles.loaderDot, animationDelay: '-0.16s'}} />
-                    <div style={baseStyles.loaderDot} />
+                {loading && (
+                  <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}>
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px',
+                      padding: '16px 24px',
+                      backgroundColor: 'rgba(30, 41, 59, 0.6)',
+                      borderRadius: '20px',
+                      borderBottomLeftRadius: '6px',
+                      border: '1px solid rgba(51, 65, 85, 0.8)',
+                      width: 'fit-content',
+                      backdropFilter: 'blur(10px)',
+                      animation: 'slideUpFadeIn 0.3s ease-out forwards'
+                    }}>
+                      <div style={{ width: '8px', height: '8px', backgroundColor: '#38bdf8', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out both', animationDelay: '-0.32s' }} />
+                      <div style={{ width: '8px', height: '8px', backgroundColor: '#38bdf8', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out both', animationDelay: '-0.16s' }} />
+                      <div style={{ width: '8px', height: '8px', backgroundColor: '#38bdf8', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out both' }} />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              <div ref={messagesEndRef} />
-            </div>
+                <div ref={messagesEndRef} />
+              </div>
 
-            <div style={baseStyles.inputSection}>
-              <form style={baseStyles.inputForm} onSubmit={handleAsk}>
-                <textarea
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey && !loading) {
-                      e.preventDefault();
-                      handleAsk(e);
-                    }
-                  }}
-                  placeholder="Ask about operations, plans, revenue, staff, satisfaction, forecasts..."
-                  disabled={loading}
-                  style={baseStyles.textInput}
-                  rows={1}
-                />
-                <button
-                  type="submit"
-                  disabled={loading || !question.trim()}
-                  style={{
-                    ...baseStyles.submitButton,
-                    opacity: loading || !question.trim() ? 0.5 : 1,
-                    cursor: loading || !question.trim() ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  {loading ? (
-                    <div style={baseStyles.spinner} />
-                  ) : (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </button>
-              </form>
+              <div style={{
+                padding: '24px 32px',
+                background: 'rgba(15, 23, 42, 0.8)',
+                borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <form style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '16px',
+                  padding: '10px 10px 10px 20px',
+                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)',
+                  transition: 'border-color 0.3s ease'
+                }} onSubmit={handleAsk}>
+                  <textarea
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey && !loading) {
+                        e.preventDefault();
+                        handleAsk(e);
+                      }
+                    }}
+                    placeholder="Ask about operations, plans, revenue, staff, satisfaction, forecasts..."
+                    disabled={loading}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: '#f8fafc',
+                      fontSize: '15px',
+                      fontFamily: 'inherit',
+                      resize: 'none',
+                      maxHeight: '120px',
+                      outline: 'none',
+                      padding: '10px 0',
+                      lineHeight: '1.5'
+                    }}
+                    rows={1}
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading || !question.trim()}
+                    style={{
+                      padding: '14px',
+                      backgroundColor: loading || !question.trim() ? 'rgba(59, 130, 246, 0.5)' : '#2563eb',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '12px',
+                      cursor: loading || !question.trim() ? 'not-allowed' : 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: loading || !question.trim() ? 'none' : '0 4px 12px rgba(37, 99, 235, 0.4)'
+                    }}
+                  >
+                    {loading ? (
+                      <div style={{
+                        width: '20px',
+                        height: '20px',
+                        border: '2px solid rgba(255,255,255,0.3)',
+                        borderRadius: '50%',
+                        borderTopColor: '#fff',
+                        animation: 'spin 1s ease-in-out infinite'
+                      }} />
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                  </button>
+                </form>
 
-              {messages.length <= 2 && (
-                <div style={baseStyles.suggestionsContainer}>
-                  <div style={baseStyles.suggestionsTitle}>Try asking:</div>
-                  <div style={baseStyles.chipsRow}>
-                    {suggestions.map((text, i) => (
-                      <div key={i} className="suggestion-chip" style={baseStyles.chip} onClick={() => handleChipClick(text)}>
-                        {text}
-                      </div>
-                    ))}
+                {messages.length <= 2 && (
+                  <div style={{ marginTop: '24px' }}>
+                    <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>Suggested Queries:</div>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                      {suggestions.map((text, i) => (
+                        <div key={i} className="suggestion-chip" style={{
+                          padding: '8px 16px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '24px',
+                          color: '#cbd5e1',
+                          fontSize: '13px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          whiteSpace: 'nowrap',
+                          backdropFilter: 'blur(4px)'
+                        }} onClick={() => handleChipClick(text)}>
+                          {text}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </Section>
+        </Section>
+      </div>
     </>
   );
 }
