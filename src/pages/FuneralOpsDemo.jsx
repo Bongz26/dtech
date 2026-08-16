@@ -828,7 +828,7 @@ export default function FuneralOpsDemo() {
 
       <Section>
         <div style={baseStyles.container}>
-          <style>{\`
+          <style>{`
             @keyframes spin {
               to { transform: rotate(360deg); }
             }
@@ -856,7 +856,7 @@ export default function FuneralOpsDemo() {
             ::-webkit-scrollbar-thumb:hover {
               background: #374151; 
             }
-          \`}</style>
+          `}</style>
 
           <div style={baseStyles.card}>
             <div style={baseStyles.header}>
