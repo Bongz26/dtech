@@ -189,9 +189,9 @@ const createDemoData = () => ({
     utilization: '67%',
     vehicles: [
       {
-        name: 'Thlolo 1 FS',
+        name: 'Tholo 1 FS',
         type: 'Hearse',
-        reg: 'THLOLO 1 FS',
+        reg: 'THOLO 1 FS',
         driver: 'Sibusiso',
         status: 'Operational',
         last_service: '2026-08-01',
@@ -199,9 +199,9 @@ const createDemoData = () => ({
         mileage: '187,450 km'
       },
       {
-        name: 'Thlolo 2 FS',
+        name: 'Tholo 2 FS',
         type: 'Hearse',
-        reg: 'THLOLO 456 GP',
+        reg: 'THOLO 2 FS',
         driver: 'Kagiso',
         status: 'Operational',
         last_service: '2026-07-28',
@@ -209,9 +209,9 @@ const createDemoData = () => ({
         mileage: '165,230 km'
       },
       {
-        name: 'Family Car 1',
+        name: 'Tholo 3 FS',
         type: 'Family Car',
-        reg: 'THLOLO 789 HP',
+        reg: 'THOLO 3 FS',
         driver: 'Tebogo',
         status: 'Operational',
         last_service: '2026-08-05',
@@ -219,9 +219,9 @@ const createDemoData = () => ({
         mileage: '142,100 km'
       },
       {
-        name: 'Family Car 2',
+        name: 'Tholo 4 FS',
         type: 'Family Car',
-        reg: 'THLOLO 234 LP',
+        reg: 'THOLO 4 FS',
         driver: 'Mandla',
         status: 'Operational',
         last_service: '2026-07-30',
@@ -229,9 +229,9 @@ const createDemoData = () => ({
         mileage: '156,780 km'
       },
       {
-        name: 'Family Car 3',
+        name: 'Tholo 5 FS',
         type: 'Family Car',
-        reg: 'THLOLO 567 FS',
+        reg: 'THOLO 5 FS',
         driver: 'Thabo',
         status: 'Operational',
         last_service: '2026-08-03',
@@ -794,18 +794,17 @@ export default function FuneralOpsDemo() {
       .replace(/Tlholo Victory/g, 'Funeral Service')
       .replace(/THLOLO VICTORY/g, 'FUNERAL SERVICE')
       // Replace specific fleet names with generic
-      .replace(/Thlolo 1 FS/g, 'Fleet Unit 1')
-      .replace(/Thlolo 2 FS/g, 'Fleet Unit 2')
+      .replace(/Tholo 1 FS/g, 'Fleet Unit 1')
+      .replace(/Tholo 2 FS/g, 'Fleet Unit 2')
+      .replace(/Tholo 3 FS/g, 'Fleet Unit 3')
+      .replace(/Tholo 4 FS/g, 'Fleet Unit 4')
+      .replace(/Tholo 5 FS/g, 'Fleet Unit 5')
       // Replace vehicle registrations with generic
-      .replace(/THLOLO 1 FS/g, 'VEH-001-ZA')
-      .replace(/THLOLO 456 GP/g, 'VEH-002-ZA')
-      .replace(/THLOLO 789 HP/g, 'VEH-003-ZA')
-      .replace(/THLOLO 234 LP/g, 'VEH-004-ZA')
-      .replace(/THLOLO 567 FS/g, 'VEH-005-ZA')
-      // Replace family car names
-      .replace(/Family Car 1/g, 'Vehicle 1')
-      .replace(/Family Car 2/g, 'Vehicle 2')
-      .replace(/Family Car 3/g, 'Vehicle 3')
+      .replace(/THOLO 1 FS/g, 'VEH-001-ZA')
+      .replace(/THOLO 2 FS/g, 'VEH-002-ZA')
+      .replace(/THOLO 3 FS/g, 'VEH-003-ZA')
+      .replace(/THOLO 4 FS/g, 'VEH-004-ZA')
+      .replace(/THOLO 5 FS/g, 'VEH-005-ZA')
       // Replace branch names
       .replace(/Qwaqwa Branch/g, 'Branch A')
       .replace(/Bethlehem Branch/g, 'Branch B')
