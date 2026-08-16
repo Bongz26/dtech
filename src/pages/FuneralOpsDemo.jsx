@@ -189,7 +189,8 @@ export default function FuneralOpsDemo() {
   ]);
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isThloloMode, setIsThloloMode] = useState(false);
+  const [isDemoUnlocked, setIsDemoUnlocked] = useState(false);
+  const [clientMode, setClientMode] = useState('');
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -211,21 +212,29 @@ export default function FuneralOpsDemo() {
       const magicPhrases = ["reuben", "test victory", "doing the right things right"];
       
       if (magicPhrases.some(p => lowerQ.includes(p))) {
-        setIsThloloMode(true);
+        setIsDemoUnlocked(true);
+        setClientMode('thlolo');
         responseText = "Welcome Reuben from Thlolo Victory. I have successfully loaded your operational data.";
-      } else if (isThloloMode) {
+      } else if (lowerQ.includes('vanessa')) {
+        setIsDemoUnlocked(true);
+        setClientMode('vanessa');
+        responseText = "Welcome Vanessa this is Dondas Tech AI Manager - For Funeral Service you can ask me about mortuary occupancy, claims, fleet tracking, airtime benefits, or our weekend stock requirements.";
+      } else if (isDemoUnlocked) {
         if (lowerQ.includes('mortuary') || lowerQ.includes('occupancy') || lowerQ.includes('decease') || lowerQ.includes('fridge') || lowerQ.includes('bodies')) {
           responseText = "We currently have 13 deceased in total.\n- Qwaqwa Mortuary: 8 Deceased (Thabo Mokoena, Sipho Ndlovu, etc.)\n- BHM Mortuary: 3 Deceased (Bongani Ngcobo, etc.)\n- Mpumalanga Mortuary: 2 Deceased (Thandiwe Mahlangu, Vusi Shabangu)";
         } else if (lowerQ.includes('claim') || lowerQ.includes('arrangement') || lowerQ.includes('status') || lowerQ.includes('plan')) {
           responseText = "4 Families have claimed (3 in Qwaqwa, 1 in Mpumalanga). Cleansing time is scheduled for all 4. We are still pending Friday Delivery time and Saturday Service time.\n\n4 cases are unclaimed:\n- 2 have no policy (Private)\n- 1 has Optimum Cover\n- 1 has Ultimate Cover";
         } else if (lowerQ.includes('vehicle') || lowerQ.includes('car') || lowerQ.includes('fleet') || lowerQ.includes('hearse')) {
-          responseText = "For the 4 claimed cases this weekend, we need 9 vehicles (4 Hearses and 5 Family Cars).\nAvailable fleet includes Thlolo 1 FS, Thlolo 2 FS, etc.\nDrivers on duty: Sibusiso, Kagiso, Tebogo, Mandla, Tshepo.";
+          const fleetNames = clientMode === 'thlolo' ? "Thlolo 1 FS, Thlolo 2 FS" : "Fleet Unit 1, Fleet Unit 2";
+          responseText = `For the 4 claimed cases this weekend, we need 9 vehicles (4 Hearses and 5 Family Cars).\nAvailable fleet includes ${fleetNames}, etc.\nDrivers on duty: Sibusiso, Kagiso, Tebogo, Mandla, Tshepo.`;
         } else if (lowerQ.includes('casket') || lowerQ.includes('coffin') || lowerQ.includes('grocery')) {
           responseText = "Caskets for the 4 claimed cases:\n- 2x Pongee - Cherry\n- 1x 1/4 View - Kiaat\n- 1x Woven - brown / Mahony Dome\nAll 4 cases receive full Grocery benefits.";
         } else if (lowerQ.includes('airtime') || lowerQ.includes('benefit')) {
           responseText = "Yes, R100 airtime has been automatically sent to the 4 families who came to claim this week as part of their benefits package.";
         } else if (lowerQ.includes('location') || lowerQ.includes('track') || lowerQ.includes('where') || lowerQ.includes('control room') || lowerQ.includes('late')) {
-          responseText = "📍 GPS Tracking Active:\n- Driver Sibusiso (Thlolo 1 FS) is 15 mins away from the cemetery.\n- Driver Kagiso (Thlolo 2 FS) is currently experiencing slight traffic and is projected to be 10 minutes late for the next scheduled service. Control room has been notified to adjust timings.";
+          const driver1 = clientMode === 'thlolo' ? "(Thlolo 1 FS)" : "(Fleet Unit 1)";
+          const driver2 = clientMode === 'thlolo' ? "(Thlolo 2 FS)" : "(Fleet Unit 2)";
+          responseText = `📍 GPS Tracking Active:\n- Driver Sibusiso ${driver1} is 15 mins away from the cemetery.\n- Driver Kagiso ${driver2} is currently experiencing slight traffic and is projected to be 10 minutes late for the next scheduled service. Control room has been notified to adjust timings.`;
         } else if (lowerQ.includes('repair') || lowerQ.includes('fixing') || lowerQ.includes('who is fixing')) {
           responseText = "The 2 damaged tents were sent to Mokoena Canvas Repairs in Bethlehem. We expect them back by Thursday afternoon. I will monitor their return to ensure we don't face a shortage this weekend.";
         } else if (lowerQ.includes('weekend') || lowerQ.includes('stock') || lowerQ.includes('tent') || lowerQ.includes('inventory') || lowerQ.includes('shortage')) {
