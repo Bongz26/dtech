@@ -214,18 +214,20 @@ export default function FuneralOpsDemo() {
         setIsThloloMode(true);
         responseText = "Welcome Reuben from Thlolo Victory. I have successfully loaded your operational data.";
       } else if (isThloloMode) {
-        if (lowerQ.includes('mortuary') || lowerQ.includes('occupancy')) {
+        if (lowerQ.includes('mortuary') || lowerQ.includes('occupancy') || lowerQ.includes('decease') || lowerQ.includes('fridge') || lowerQ.includes('bodies')) {
           responseText = "We currently have 13 deceased in total.\n- Qwaqwa Mortuary: 8 Deceased (Thabo Mokoena, Sipho Ndlovu, etc.)\n- BHM Mortuary: 3 Deceased (Bongani Ngcobo, etc.)\n- Mpumalanga Mortuary: 2 Deceased (Thandiwe Mahlangu, Vusi Shabangu)";
-        } else if (lowerQ.includes('claim') || lowerQ.includes('arrangement') || lowerQ.includes('status')) {
+        } else if (lowerQ.includes('claim') || lowerQ.includes('arrangement') || lowerQ.includes('status') || lowerQ.includes('plan')) {
           responseText = "4 Families have claimed (3 in Qwaqwa, 1 in Mpumalanga). Cleansing time is scheduled for all 4. We are still pending Friday Delivery time and Saturday Service time.\n\n4 cases are unclaimed:\n- 2 have no policy (Private)\n- 1 has Optimum Cover\n- 1 has Ultimate Cover";
-        } else if (lowerQ.includes('vehicle') || lowerQ.includes('car') || lowerQ.includes('fleet')) {
+        } else if (lowerQ.includes('vehicle') || lowerQ.includes('car') || lowerQ.includes('fleet') || lowerQ.includes('hearse')) {
           responseText = "For the 4 claimed cases this weekend, we need 9 vehicles (4 Hearses and 5 Family Cars).\nAvailable fleet includes Thlolo 1 FS, Thlolo 2 FS, etc.\nDrivers on duty: Sibusiso, Kagiso, Tebogo, Mandla, Tshepo.";
-        } else if (lowerQ.includes('casket') || lowerQ.includes('coffin')) {
+        } else if (lowerQ.includes('casket') || lowerQ.includes('coffin') || lowerQ.includes('grocery') || lowerQ.includes('benefit')) {
           responseText = "Caskets for the 4 claimed cases:\n- 2x Pongee - Cherry\n- 1x 1/4 View - Kiaat\n- 1x Woven - brown / Mahony Dome\nAll 4 cases receive full Grocery benefits.";
-        } else if (lowerQ.includes('weekend') || lowerQ.includes('stock') || lowerQ.includes('tent') || lowerQ.includes('inventory')) {
+        } else if (lowerQ.includes('repair') || lowerQ.includes('fixing') || lowerQ.includes('who is fixing')) {
+          responseText = "The 2 damaged tents were sent to Mokoena Canvas Repairs in Bethlehem. We expect them back by Thursday afternoon. I will monitor their return to ensure we don't face a shortage this weekend.";
+        } else if (lowerQ.includes('weekend') || lowerQ.includes('stock') || lowerQ.includes('tent') || lowerQ.includes('inventory') || lowerQ.includes('shortage')) {
           responseText = "🚨 SHORTAGE ALERT 🚨\nWe are expecting 8 services total this weekend, which requires 8 home tents, 16 tables, 800 chairs, and 9 toilets.\n\nHowever, 2 home tents went for repairs! If we bury all 8 deceased this weekend, we will face a critical challenge because we are short on tents.";
         } else {
-          responseText = "I'm sorry, I don't have information on that. Try asking me about mortuary occupancy, claims, fleet, or our weekend stock requirements.";
+          responseText = "I'm sorry, I don't have information on that. Try asking me about mortuary occupancy, claims, fleet, tent repairs, or our weekend stock requirements.";
         }
       } else {
         responseText = "Welcome to the FuneralOps AI Demo. Please enter your customer code or company name to load your workspace.";
