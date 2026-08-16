@@ -674,14 +674,11 @@ const baseStyles = {
 
 const getBubbleStyle = (type) => {
   const base = {
-    maxWidth: '90%',
-    padding: '16px 20px',
+    padding: '14px 20px',
     borderRadius: '16px',
-    wordWrap: 'break-word',
-    whiteSpace: 'pre-wrap',
-    fontSize: '14px',
-    lineHeight: '1.5',
-    fontFamily: 'monospace'
+    fontSize: '15px',
+    lineHeight: '1.6',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
   };
 
   if (type === 'user') {
@@ -690,16 +687,20 @@ const getBubbleStyle = (type) => {
       backgroundColor: '#2563eb', 
       color: '#ffffff', 
       borderBottomRightRadius: '4px',
-      boxShadow: '0 4px 6px rgba(37, 99, 235, 0.2)',
-      fontFamily: 'inherit'
+      boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
+      whiteSpace: 'pre-wrap',
+      wordBreak: 'break-word',
+      display: 'inline-block'
     };
   } else if (type === 'assistant') {
     return { 
       ...base, 
-      backgroundColor: 'rgba(255,255,255,0.03)', 
+      backgroundColor: '#1e293b', 
       color: '#e2e8f0', 
       borderBottomLeftRadius: '4px',
-      border: '1px solid #1f2937'
+      border: '1px solid #334155',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      width: '100%'
     };
   }
   return base;
@@ -709,7 +710,7 @@ const formatMessageText = (text) => {
   if (!text) return null;
   return text.split('\n').map((line, index) => {
     const trimmed = line.trim();
-    if (!trimmed) return <div key={index} style={{ height: '12px' }} />;
+    if (!trimmed) return <div key={index} style={{ height: '8px' }} />;
 
     // Main Headers (All caps ending in colon, or short all caps words)
     if (/^[A-Z\s&]+:$/.test(trimmed) || (trimmed.toUpperCase() === trimmed && trimmed.length > 5 && !trimmed.includes(' ') && !trimmed.includes('•'))) {
@@ -717,12 +718,12 @@ const formatMessageText = (text) => {
         <div key={index} style={{ 
           color: '#38bdf8', 
           fontWeight: '700', 
-          fontSize: '0.75rem', 
-          letterSpacing: '0.1em', 
-          marginTop: index === 0 ? 0 : '20px', 
+          fontSize: '13px', 
+          letterSpacing: '1px', 
+          marginTop: index === 0 ? '4px' : '24px', 
           marginBottom: '12px', 
-          borderBottom: '1px solid rgba(56, 189, 248, 0.2)', 
-          paddingBottom: '6px',
+          borderBottom: '1px solid rgba(56, 189, 248, 0.15)', 
+          paddingBottom: '8px',
           textTransform: 'uppercase'
         }}>
           {trimmed.replace(':', '')}
@@ -736,12 +737,12 @@ const formatMessageText = (text) => {
       let innerContent = content;
       if (content.includes(':')) {
          const parts = content.split(':');
-         innerContent = <><strong style={{ color: '#e2e8f0', fontWeight: '600' }}>{parts[0]}:</strong>{parts.slice(1).join(':')}</>;
+         innerContent = <><strong style={{ color: '#f8fafc', fontWeight: '600' }}>{parts[0]}:</strong>{parts.slice(1).join(':')}</>;
       }
       return (
-        <div key={index} style={{ display: 'flex', marginBottom: '8px', paddingLeft: '4px' }}>
-          <span style={{ color: '#38bdf8', marginRight: '12px', fontSize: '1.2em', lineHeight: '1.2' }}>▪</span>
-          <span style={{ color: '#94a3b8', lineHeight: '1.5' }}>{innerContent}</span>
+        <div key={index} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px' }}>
+          <span style={{ color: '#38bdf8', marginRight: '10px', fontSize: '14px', marginTop: '2px' }}>▪</span>
+          <span style={{ color: '#cbd5e1', flex: 1, lineHeight: '1.6' }}>{innerContent}</span>
         </div>
       );
     }
@@ -750,16 +751,16 @@ const formatMessageText = (text) => {
     if (trimmed.includes(':')) {
       const parts = trimmed.split(':');
       return (
-        <div key={index} style={{ marginBottom: '8px', lineHeight: '1.5' }}>
-          <strong style={{ color: '#e2e8f0', fontWeight: '600' }}>{parts[0]}:</strong>
-          <span style={{ color: '#94a3b8' }}>{parts.slice(1).join(':')}</span>
+        <div key={index} style={{ marginBottom: '6px', lineHeight: '1.6', color: '#cbd5e1' }}>
+          <strong style={{ color: '#f8fafc', fontWeight: '600' }}>{parts[0]}:</strong>
+          <span style={{ color: '#cbd5e1' }}>{parts.slice(1).join(':')}</span>
         </div>
       );
     }
 
     // Regular text
     return (
-      <div key={index} style={{ marginBottom: '8px', color: '#94a3b8', lineHeight: '1.5' }}>
+      <div key={index} style={{ marginBottom: '8px', color: '#cbd5e1', lineHeight: '1.6' }}>
         {trimmed}
       </div>
     );
@@ -1010,11 +1011,18 @@ export default function FuneralOpsDemo() {
                 <div key={msg.id} style={{ 
                   display: 'flex', 
                   justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start', 
-                  width: '100%' 
+                  width: '100%',
+                  marginBottom: '12px'
                 }}>
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end', maxWidth: '100%', flexDirection: msg.type === 'user' ? 'row-reverse' : 'row' }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '16px', 
+                    alignItems: 'flex-end', 
+                    maxWidth: msg.type === 'assistant' ? '85%' : '75%', 
+                    flexDirection: msg.type === 'user' ? 'row-reverse' : 'row' 
+                  }}>
                     {msg.type === 'assistant' && (
-                      <img src={aiAvatar} alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', marginBottom: '4px', objectFit: 'cover', boxShadow: '0 0 10px rgba(59, 130, 246, 0.4)', flexShrink: 0 }} />
+                      <img src={aiAvatar} alt="AI" style={{ width: '32px', height: '32px', borderRadius: '50%', marginBottom: '4px', objectFit: 'cover', boxShadow: '0 0 12px rgba(59, 130, 246, 0.4)', flexShrink: 0 }} />
                     )}
                     <div style={getBubbleStyle(msg.type)}>
                       {msg.type === 'assistant' ? formatMessageText(msg.text) : msg.text}
