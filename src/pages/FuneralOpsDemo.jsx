@@ -659,7 +659,7 @@ export default function FuneralOpsDemo() {
     {
       id: 1,
       type: 'assistant',
-      text: 'Hello! 👋 I\\'m your Funeral Services AI Assistant. Welcome to Dondas Technologies.\\n\\nI can help you with:\\n\\n📊 OPERATIONAL:\\n• Mortuary occupancy & inventory\\n• Funeral arrangements & scheduling\\n• Stock management & alerts\\n• Weekend capacity planning\\n• Fleet & vehicle availability\\n\\n💼 BUSINESS INTELLIGENCE:\\n• Plan performance analysis\\n• Revenue opportunities\\n• Staff utilization & capacity\\n• On-time delivery metrics\\n• Customer satisfaction tracking\\n• Demand forecasting\\n• Strategic recommendations\\n\\nTry asking me anything!',
+      text: "Hello! 👋 I'm your Funeral Services AI Assistant. Welcome to Dondas Technologies.\n\nI can help you with:\n\n📊 OPERATIONAL:\n• Mortuary occupancy & inventory\n• Funeral arrangements & scheduling\n• Stock management & alerts\n• Weekend capacity planning\n• Fleet & vehicle availability\n\n💼 BUSINESS INTELLIGENCE:\n• Plan performance analysis\n• Revenue opportunities\n• Staff utilization & capacity\n• On-time delivery metrics\n• Customer satisfaction tracking\n• Demand forecasting\n• Strategic recommendations\n\nTry asking me anything!",
       timestamp: new Date()
     }
   ]);
