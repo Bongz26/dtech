@@ -1,0 +1,4 @@
+{
+  "summary": "Added .htaccess file to the public folder to fix direct linking on Apache servers (like cPanel/Hostinger).",
+  "updatedAt": "2026-08-15T20:28:01.944746100Z"
+}
