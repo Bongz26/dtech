@@ -23,8 +23,11 @@ const Projects = () => {
             title: "Corporate Client Portal",
             category: "Digital Platform",
             description: "A secure client portal allowing real-time document sharing, project status tracking and communication.",
-            tags: ["Vue.js", "Firebase", "Vanilla CSS"],
-            image: portalImg
+            tags: ["React", "Node.js", "Express"],
+            image: portalImg,
+            demoLink: import.meta.env.VITE_CLIENT_PORTAL_URL || "https://agentport-kf39.onrender.com",
+            buttonText: "Launch Portal",
+            isExternal: true
         },
         {
             title: "Logistics Fleet Tracker",
@@ -39,7 +42,8 @@ const Projects = () => {
             description: "A specialized, natural-language AI assistant built to streamline funeral service operations. Features real-time querying of mortuary capacity, fleet logistics and inventory management.",
             tags: ["React", "AI/LLM", "Node.js"],
             image: funeralOpsImg,
-            demoLink: "/projects/funeralops-demo"
+            demoLink: "/projects/funeralops-demo",
+            buttonText: "Try the Demo"
         }
     ];
 
@@ -108,11 +112,29 @@ const Projects = () => {
                                 </div>
                                 {project.demoLink && (
                                     <div style={{ marginTop: '1.5rem' }}>
-                                        <Link to={project.demoLink} style={{ textDecoration: 'none' }}>
-                                            <Button variant="primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
-                                                Try the Demo
-                                            </Button>
-                                        </Link>
+                                        {project.isExternal || project.demoLink.startsWith('http') ? (
+                                            <a
+                                                href={project.demoLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                <Button variant="primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                                    {project.buttonText || "Try the Demo"}
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                    </svg>
+                                                </Button>
+                                            </a>
+                                        ) : (
+                                            <Link to={project.demoLink} style={{ textDecoration: 'none' }}>
+                                                <Button variant="primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                                    {project.buttonText || "Try the Demo"}
+                                                </Button>
+                                            </Link>
+                                        )}
                                     </div>
                                 )}
                             </div>
